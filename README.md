@@ -1,4 +1,4 @@
-# Startup app
+# Activus app
 
 ## Run the app
 

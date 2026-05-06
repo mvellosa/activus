@@ -1,5 +1,5 @@
 [project]
-name = "startup"
+name = "activus"
 version = "0.1.0"
 description = ""
 readme = "README.md"
@@ -8,20 +8,19 @@ authors = [
     { name = "Flet developer", email = "you@example.com" }
 ]
 dependencies = [
-    "flet>=0.82.2",
-    "flet-charts>=0.82.2",
+    "flet>=0.82.2"
 ]
 
 [dependency-groups]
 dev = [
     "flet-cli>=0.82.2",
-    "flet-desktop-light>=0.82.2",
+    "flet-desktop>=0.82.2",
     "flet-web>=0.82.2",
 ]
 
 [tool.flet]
 org = "com.mycompany"
-product = "startup"
+product = "activus"
 company = "Flet"
 copyright = "Copyright (C) 2023-2026 by Flet"
 

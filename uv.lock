@@ -3,6 +3,31 @@ revision = 3
 requires-python = ">=3.10"
 
 [[package]]
+name = "activus"
+version = "0.1.0"
+source = { virtual = "." }
+dependencies = [
+    { name = "flet" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "flet-cli" },
+    { name = "flet-desktop" },
+    { name = "flet-web" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "flet", specifier = ">=0.82.2" }]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "flet-cli", specifier = ">=0.82.2" },
+    { name = "flet-desktop", specifier = ">=0.82.2" },
+    { name = "flet-web", specifier = ">=0.82.2" },
+]
+
+[[package]]
 name = "annotated-doc"
 version = "0.0.4"
 source = { registry = "https://pypi.org/simple" }
@@ -267,18 +292,6 @@ wheels = [
 ]
 
 [[package]]
-name = "flet-charts"
-version = "0.82.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "flet" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/f7/82/9bc46e9a0d0ab6595b32a1f935cc7182ce1100ec3793ee0542d94aefbd3d/flet_charts-0.82.2.tar.gz", hash = "sha256:4c224ba72cf7385c7f6b239f32feb944ea154efd9ac658a114844dcab3d923ab", size = 39033, upload-time = "2026-03-10T01:15:58.839Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e9/dc/62c188e97838b6e2177235ec7e020b6fa5e50228732fd08472220eb83232/flet_charts-0.82.2-py3-none-any.whl", hash = "sha256:1ad753a7f62fc3716f4e32ceddf5c2209699987701c0053572644b545a5d9416", size = 62003, upload-time = "2026-03-10T01:15:57.896Z" },
-]
-
-[[package]]
 name = "flet-cli"
 version = "0.82.2"
 source = { registry = "https://pypi.org/simple" }
@@ -298,24 +311,27 @@ wheels = [
 ]
 
 [[package]]
-name = "flet-desktop-light"
+name = "flet-desktop"
 version = "0.82.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "flet" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d2/d4/60571cc34ce3141f563cd24addb0ed41b696f6714dd7f8bed8b36fca4bc1/flet_desktop_light-0.82.2.tar.gz", hash = "sha256:2e6dee1b0f3c0202e003bbb5de4222b5ae622353268da8fe2047e12adec4ffe3", size = 1163, upload-time = "2026-03-10T01:15:39.916Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6e/f0/08e5844fd0ee9e20aa3dd2392a3f26703c233db1a722d51038852bc0a892/flet_desktop-0.82.2.tar.gz", hash = "sha256:cebc23ebd1a97272c59407f7ea94a64f821a7420667202111adfef2333e97f27", size = 4317, upload-time = "2026-03-10T01:14:42.503Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/72/a9/3249ca3d02d5b23fca898c2dbdf90463320587484cf3de07cb0808ab80ee/flet_desktop_light-0.82.2-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:9d60afed3d5283345142b84fb003bc29e4873ee103e8df7a5aad5c19e31a1003", size = 24142265, upload-time = "2026-03-10T01:15:00.411Z" },
-    { url = "https://files.pythonhosted.org/packages/28/6b/1059e271e00cc23d203b98a12291c5b46576af6b1b14e06617875a0d5c13/flet_desktop_light-0.82.2-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:f6c2ebb0ebb15e786476516f856e06f2aa60529713455ef5abc344047746ebcd", size = 24265873, upload-time = "2026-03-10T01:15:09.275Z" },
-    { url = "https://files.pythonhosted.org/packages/07/f7/57432615c60d342defda1d0569a2e4543807684b4a8826f013073813db85/flet_desktop_light-0.82.2-py3-none-manylinux_2_31_aarch64.whl", hash = "sha256:5b762541ec2d3af6dfa835b8d884e09d3c161735b68ea8dfbff5cb2662ed53ac", size = 24142014, upload-time = "2026-03-10T01:15:32.339Z" },
-    { url = "https://files.pythonhosted.org/packages/80/8c/f9ae60e528a16cf33f51c0b73ca26b46a6291937840259dbbe600294fdb2/flet_desktop_light-0.82.2-py3-none-manylinux_2_31_x86_64.whl", hash = "sha256:85c47bcd0da1563b67388017ab8b19c06d523dff7c55c70e1d388b7b4f74663a", size = 24263617, upload-time = "2026-03-10T01:15:37.037Z" },
-    { url = "https://files.pythonhosted.org/packages/7b/c1/858a4af5e182a748bd26ec75f22f09b24b43248d0c63b17c73c403dd0186/flet_desktop_light-0.82.2-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:245cf030dd9c9f346ee38a34b356e52812af4a337d9d898184390766ce4b0a21", size = 24146969, upload-time = "2026-03-10T01:15:24.791Z" },
-    { url = "https://files.pythonhosted.org/packages/93/d1/94a52406c33404ca982af47d0b49d15927a59fedfdca04beca23f7523170/flet_desktop_light-0.82.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:3f1995b796b4269ec4cabe1ab2574488df8a74d54d2d847ef00d487bf2080f9b", size = 24260667, upload-time = "2026-03-10T01:15:05.657Z" },
-    { url = "https://files.pythonhosted.org/packages/9a/eb/4d41967e56189a34c94b06e622cc484acb0e18a94b26bda0797f04fae312/flet_desktop_light-0.82.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:93c6fef28f7ac889404a7eb9ab5437e8dd077576680a34b3d2458da0cab422be", size = 24157442, upload-time = "2026-03-10T01:15:13.252Z" },
-    { url = "https://files.pythonhosted.org/packages/64/0f/7bde17ebbe6dffa5a71c082d82fb5f76e9ff43156af829e6928fc8f77b80/flet_desktop_light-0.82.2-py3-none-manylinux_2_36_x86_64.whl", hash = "sha256:5c542c0b0b2d8107edb530b971bdb6cd149528899765c03b032eeaaeaa989922", size = 24264149, upload-time = "2026-03-10T01:15:16.916Z" },
-    { url = "https://files.pythonhosted.org/packages/30/16/86052e8ba149e2d1b4cfe28849dbc89ecc0821f89b273f1d57f04c5aa3e1/flet_desktop_light-0.82.2-py3-none-manylinux_2_39_aarch64.whl", hash = "sha256:093c6e3c4ea9f440d853d4f459e29456c642056a363bf1353f87d6e90fc4d216", size = 24152204, upload-time = "2026-03-10T01:15:20.803Z" },
-    { url = "https://files.pythonhosted.org/packages/e3/87/c743650f244e00f6bc33e494ed4d3e12314ddb915ae1020de7b1d1f07450/flet_desktop_light-0.82.2-py3-none-manylinux_2_39_x86_64.whl", hash = "sha256:ef41fce221719b35f52286532c937fb632e848f5700a7d3ccd4ff2ce64c0ba47", size = 24261585, upload-time = "2026-03-10T01:15:28.546Z" },
+    { url = "https://files.pythonhosted.org/packages/8a/1b/0f29c7fb4a347e20af0925febe0b575b4021340e92dbc9c229adce8376ee/flet_desktop-0.82.2-py3-none-macosx_12_0_arm64.whl", hash = "sha256:74de5549bc27163c97d3e484873cf53eb4f8f48ecb5ca21444d4041b6bb1cf39", size = 52023742, upload-time = "2026-03-10T01:14:55.019Z" },
+    { url = "https://files.pythonhosted.org/packages/ad/0f/5a36eb36bfcae73c1f5a8cb72e18fc83a9be71c640a119c6b312efdc2a7b/flet_desktop-0.82.2-py3-none-macosx_12_0_x86_64.whl", hash = "sha256:e0afb8684b2151c0723171b2150c8ce884b8b1ff0f22dbf77fcf4a23d9867781", size = 52023744, upload-time = "2026-03-10T01:14:04.303Z" },
+    { url = "https://files.pythonhosted.org/packages/03/e8/7a34586375469f239501af6c491ebbe126c0d0e0a56fc305c4e4663d698e/flet_desktop-0.82.2-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:71c7c33c00566b25cf290cd341651e439cbd95afbf790d77af2aeac49335d124", size = 24570949, upload-time = "2026-03-10T01:14:44.975Z" },
+    { url = "https://files.pythonhosted.org/packages/ae/1b/c8e07bc42f68108ceefd0b9b36e7ade7ba0b3814efb1b32656e4b8e58b0f/flet_desktop-0.82.2-py3-none-manylinux_2_28_x86_64.whl", hash = "sha256:76d0318d8e0467737aefcd00d26a03d217772f4021b71b5313d2e22ea069a957", size = 24696121, upload-time = "2026-03-10T01:14:08.688Z" },
+    { url = "https://files.pythonhosted.org/packages/66/ab/058dc1b7f547051630f6c223e13a073056af641934f7c73a562ff9b2251b/flet_desktop-0.82.2-py3-none-manylinux_2_31_aarch64.whl", hash = "sha256:2a4bb5c3a4b7a16e17fd58f6ae916632bcd0738fd0257789e31b5c5d77625433", size = 24560917, upload-time = "2026-03-10T01:14:16.057Z" },
+    { url = "https://files.pythonhosted.org/packages/22/16/d34024347bf091aea248d18e9419c61e1ac004b28b1fcd504d504061766c/flet_desktop-0.82.2-py3-none-manylinux_2_31_x86_64.whl", hash = "sha256:aab635f447eb8896bcf412f40724a6cf8a9fcd700eb1015f13b0a06f8c9d5292", size = 24690029, upload-time = "2026-03-10T01:14:37.06Z" },
+    { url = "https://files.pythonhosted.org/packages/8a/e3/2f9f47614c1bbfce0148c09f73bdeb94426c0aac6fa9dc893414dc26f829/flet_desktop-0.82.2-py3-none-manylinux_2_35_aarch64.whl", hash = "sha256:bdab3215a429227a46b5da564c586172737c7e64be42ccf5d4f2b847d652d25d", size = 24561981, upload-time = "2026-03-10T01:14:12.247Z" },
+    { url = "https://files.pythonhosted.org/packages/d2/52/86e8958346d1de1c2952ad96279311d1eae19267ab4d4497ac16f2c3f443/flet_desktop-0.82.2-py3-none-manylinux_2_35_x86_64.whl", hash = "sha256:811f2549509a299015fc6043cf8d0eebf381919c08a756f4d01f92e4f74be45a", size = 24688327, upload-time = "2026-03-10T01:14:28.443Z" },
+    { url = "https://files.pythonhosted.org/packages/0e/fd/84efcd458071f5b71cb0306e67fa57b23152de724cf3680250b7b24c1413/flet_desktop-0.82.2-py3-none-manylinux_2_36_aarch64.whl", hash = "sha256:82edbbf1a08fe1a761c6912cd81bbc1c8b7530496c9a12f20993a5ba0a1044f7", size = 24582270, upload-time = "2026-03-10T01:14:40.714Z" },
+    { url = "https://files.pythonhosted.org/packages/71/46/2bc53929be5b36a5548d10fd606b9076401607726f27c40b76e3a0bfd80e/flet_desktop-0.82.2-py3-none-manylinux_2_36_x86_64.whl", hash = "sha256:b7d490c71d57c6bf5fc4fda1e87a506406037c4352118f022e548b09c91d0aee", size = 24693591, upload-time = "2026-03-10T01:14:19.815Z" },
+    { url = "https://files.pythonhosted.org/packages/e6/c3/6825891e0aef80ab7d03fec956c74761d3b8d8621f30b6476cd87f854806/flet_desktop-0.82.2-py3-none-manylinux_2_39_aarch64.whl", hash = "sha256:a1cdaaea71fa9513528bd2a02006818537c1bed99cf32f8f2fd76d9db70873eb", size = 24576004, upload-time = "2026-03-10T01:14:32.362Z" },
+    { url = "https://files.pythonhosted.org/packages/33/8e/ef350f2dff321466455a4acbc7a2d0f2e3414e2bc8713d6e4845959a816f/flet_desktop-0.82.2-py3-none-manylinux_2_39_x86_64.whl", hash = "sha256:259652bd86bbd7d13968b7fd197e70ae07200dabb5651354a2a0f0d950b13406", size = 27382527, upload-time = "2026-03-10T01:14:49.103Z" },
+    { url = "https://files.pythonhosted.org/packages/e7/b1/fe8354d4a46f5fb90fb95f18e2d2549fd04093b62f7e2bbfa9efc4fb7fb0/flet_desktop-0.82.2-py3-none-win_amd64.whl", hash = "sha256:1150f1f1ae377ab55b75974d23578fe6476ae10970eeaf0dd44da18ac9f880bf", size = 40769173, upload-time = "2026-03-10T01:14:24.57Z" },
 ]
 
 [[package]]
@@ -929,35 +945,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/81/69/17425771797c36cded50b7fe44e850315d039f28b15901ab44839e70b593/starlette-1.0.0.tar.gz", hash = "sha256:6a4beaf1f81bb472fd19ea9b918b50dc3a77a6f2e190a12954b25e6ed5eea149", size = 2655289, upload-time = "2026-03-22T18:29:46.779Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/0b/c9/584bc9651441b4ba60cc4d557d8a547b5aff901af35bda3a4ee30c819b82/starlette-1.0.0-py3-none-any.whl", hash = "sha256:d3ec55e0bb321692d275455ddfd3df75fff145d009685eb40dc91fc66b03d38b", size = 72651, upload-time = "2026-03-22T18:29:45.111Z" },
-]
-
-[[package]]
-name = "startup"
-version = "0.1.0"
-source = { virtual = "." }
-dependencies = [
-    { name = "flet" },
-    { name = "flet-charts" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "flet-cli" },
-    { name = "flet-desktop-light" },
-    { name = "flet-web" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "flet", specifier = ">=0.82.2" },
-    { name = "flet-charts", specifier = ">=0.82.2" },
-]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "flet-cli", specifier = ">=0.82.2" },
-    { name = "flet-desktop-light", specifier = ">=0.82.2" },
-    { name = "flet-web", specifier = ">=0.82.2" },
 ]
 
 [[package]]
