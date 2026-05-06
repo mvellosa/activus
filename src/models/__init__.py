@@ -1,3 +1,3 @@
-from .candidates import CandidatesBackend, Metric, UserDetails
+from .candidates import CandidatesBackend, Metric, MetricName, UserDetails
 
-__all__ = ["CandidatesBackend", "Metric", "UserDetails"]
+__all__ = ["CandidatesBackend", "Metric", "MetricName", "UserDetails"]

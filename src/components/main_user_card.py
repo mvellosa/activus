@@ -3,6 +3,7 @@ import flet as ft
 from models import Metric, UserDetails
 
 from .circular_metric import CircularMetric
+from .metric_definitions import build_metrics
 from .user_avatar import UserAvatar
 
 
@@ -26,32 +27,39 @@ class MainUserCard(ft.Card):
                 spacing=16,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 controls=[
-                    ft.Row(
-                        alignment=ft.MainAxisAlignment.CENTER,
-                        controls=[
-                            CircularMetric(
-                                metric=Metric(
-                                    label="Main",
-                                    value=self.user.main_metric,
-                                    icon=ft.Icons.PERSON,
-                                ),
-                                size=138,
-                                stroke_width=15,
-                                center_content=UserAvatar(self.user, size=92),
-                                gradient_colors=("#6322C6", "#07484D"),
-                                interactive=False,
-                            )
-                        ]
-                    ),
-                    ft.Row(
-                        alignment=ft.MainAxisAlignment.SPACE_EVENLY,
-                        controls=[
-                            CircularMetric(metric=metric, size=58, stroke_width=7)
-                            for metric in self.user.metrics
-                        ],
-                    ),
+                    self.big_user_metric(),
+                    self.small_user_metrics(),
                 ],
             ),
+        )
+
+    def big_user_metric(self) -> ft.Row:
+        return ft.Row(
+            alignment=ft.MainAxisAlignment.CENTER,
+            controls=[
+                CircularMetric(
+                    metric=Metric(
+                        label="Main",
+                        value=self.user.main_metric,
+                        icon=ft.Icons.PERSON,
+                    ),
+                    size=138,
+                    stroke_width=15,
+                    center_content=UserAvatar(self.user, size=92),
+                    gradient_colors=("#6322C6", "#07484D"),
+                    interactive=False,
+                )
+            ],
+        )
+
+    def small_user_metrics(self) -> ft.Row:
+        metrics = build_metrics(self.user.metrics)
+        return ft.Row(
+            alignment=ft.MainAxisAlignment.SPACE_EVENLY,
+            controls=[
+                CircularMetric(metric=metric, size=58, stroke_width=7)
+                for metric in metrics
+            ],
         )
 
     def update_user(self, user: UserDetails) -> None:

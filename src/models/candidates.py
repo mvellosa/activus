@@ -1,9 +1,18 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from enum import StrEnum
 from typing import Protocol
 
 import flet as ft
+
+
+class MetricName(StrEnum):
+    """Fixed metric identifiers supported by the app."""
+
+    M1 = "M1"
+    M2 = "M2"
+    M3 = "M3"
 
 
 @dataclass(frozen=True)
@@ -25,7 +34,7 @@ class UserDetails:
     subtitle: str
     image_url: str | None
     main_metric: float
-    metrics: list[Metric]
+    metrics: dict[MetricName, float]
     final_score: float
 
 

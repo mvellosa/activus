@@ -1,6 +1,4 @@
-import flet as ft
-
-from models import Metric, UserDetails
+from models import MetricName, UserDetails
 
 
 class MockCandidatesBackend:
@@ -9,55 +7,55 @@ class MockCandidatesBackend:
     def get_candidates(self) -> list[UserDetails]:
         return [
             UserDetails(
-                user_id="u1",
-                name="Usuario1",
+                user_id="a1",
+                name="AUsuario1",
                 subtitle="infos adicionais",
                 image_url=None,
                 main_metric=0.72,
-                metrics=[
-                    Metric(label="M1", value=0.64, icon=ft.Icons.TIMER_OUTLINED),
-                    Metric(label="M2", value=0.81, icon=ft.Icons.SPEED_OUTLINED),
-                    Metric(label="M3", value=0.48, icon=ft.Icons.STAR_BORDER_OUTLINED),
-                ],
+                metrics={
+                    MetricName.M1: 0.64,
+                    MetricName.M2: 0.81,
+                    MetricName.M3: 0.48,
+                },
                 final_score=0.76,
             ),
             UserDetails(
-                user_id="u2",
-                name="Usuario2",
+                user_id="b2",
+                name="BUsuario2",
                 subtitle="infos adicionais",
                 image_url=None,
                 main_metric=0.58,
-                metrics=[
-                    Metric(label="M1", value=0.51, icon=ft.Icons.TIMER_OUTLINED),
-                    Metric(label="M2", value=0.62, icon=ft.Icons.SPEED_OUTLINED),
-                    Metric(label="M3", value=0.74, icon=ft.Icons.STAR_BORDER_OUTLINED),
-                ],
+                metrics={
+                    MetricName.M1: 0.51,
+                    MetricName.M2: 0.62,
+                    MetricName.M3: 0.74,
+                },
                 final_score=0.68,
             ),
             UserDetails(
-                user_id="u3",
-                name="Usuario3",
+                user_id="c3",
+                name="CUsuario3",
                 subtitle="infos adicionais",
                 image_url=None,
                 main_metric=0.84,
-                metrics=[
-                    Metric(label="M1", value=0.78, icon=ft.Icons.TIMER_OUTLINED),
-                    Metric(label="M2", value=0.92, icon=ft.Icons.SPEED_OUTLINED),
-                    Metric(label="M3", value=0.66, icon=ft.Icons.STAR_BORDER_OUTLINED),
-                ],
+                metrics={
+                    MetricName.M1: 0.78,
+                    MetricName.M2: 0.92,
+                    MetricName.M3: 0.66,
+                },
                 final_score=0.88,
             ),
             UserDetails(
-                user_id="u4",
-                name="Usuario4",
+                user_id="d4",
+                name="DUsuario4",
                 subtitle="infos adicionais",
                 image_url=None,
                 main_metric=0.43,
-                metrics=[
-                    Metric(label="M1", value=0.35, icon=ft.Icons.TIMER_OUTLINED),
-                    Metric(label="M2", value=0.46, icon=ft.Icons.SPEED_OUTLINED),
-                    Metric(label="M3", value=0.57, icon=ft.Icons.STAR_BORDER_OUTLINED),
-                ],
+                metrics={
+                    MetricName.M1: 0.35,
+                    MetricName.M2: 0.46,
+                    MetricName.M3: 0.57,
+                },
                 final_score=0.52,
             ),
         ]
