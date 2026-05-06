@@ -68,6 +68,7 @@ class UserListItem(ft.Container):
                     size=42,
                     stroke_width=6,
                     show_number=True,
+                    interactive=False,
                 ),
             ],
         )
