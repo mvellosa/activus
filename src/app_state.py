@@ -17,3 +17,4 @@ class AppState:
     selected_candidate: UserDetails
     users: list[UserDetails]
     selected_tab: AppTab = AppTab.PROFILE
+    is_editing_metrics: bool = False

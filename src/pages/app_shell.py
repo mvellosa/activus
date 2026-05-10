@@ -4,10 +4,11 @@ import flet as ft
 
 from app_state import AppState, AppTab
 from components import BottomNav
-from models import CandidatesBackend, UserDetails
+from models import CandidatesBackend, MetricName, UserDetails
 from theme import APP_BG_COLOR
 
 from .competition_page import CompetitionPage
+from .metrics_form_page import MetricsFormPage
 from .profile_page import ProfilePage
 
 
@@ -46,10 +47,35 @@ class CompetitionApp:
         if self.page is None or self.state is None:
             return
 
-        if self.state.selected_tab == AppTab.PROFILE:
-            body: ft.Control = ProfilePage(self.state)
+        if self.state.is_editing_metrics:
+            body: ft.Control = MetricsFormPage(
+                user=self.state.logged_user,
+                history=self.backend.get_history(self.state.logged_user.user_id),
+                on_submit=self.update_logged_user_metrics,
+                on_cancel=self.close_metrics_form,
+            )
+            controls = [body]
+        elif self.state.selected_tab == AppTab.PROFILE:
+            body = ProfilePage(
+                self.state,
+                on_edit_metrics=self.open_metrics_form,
+            )
+            controls = [
+                body,
+                BottomNav(
+                    selected_tab=self.state.selected_tab,
+                    on_change=self.change_tab,
+                ),
+            ]
         else:
             body = CompetitionPage(self.state, on_select_user=self.select_user)
+            controls = [
+                body,
+                BottomNav(
+                    selected_tab=self.state.selected_tab,
+                    on_change=self.change_tab,
+                ),
+            ]
 
         self.page.clean()
         self.page.add(
@@ -57,13 +83,7 @@ class CompetitionApp:
                 expand=True,
                 content=ft.Column(
                     spacing=12,
-                    controls=[
-                        body,
-                        BottomNav(
-                            selected_tab=self.state.selected_tab,
-                            on_change=self.change_tab,
-                        ),
-                    ],
+                    controls=controls,
                 ),
             )
         )
@@ -81,4 +101,39 @@ class CompetitionApp:
             return
 
         self.state.selected_tab = tab
+        self.state.is_editing_metrics = False
+        self._render()
+
+    def open_metrics_form(self) -> None:
+        if self.state is None:
+            return
+
+        self.state.is_editing_metrics = True
+        self._render()
+
+    def close_metrics_form(self) -> None:
+        if self.state is None:
+            return
+
+        self.state.is_editing_metrics = False
+        self._render()
+
+    def update_logged_user_metrics(self, metrics: dict[MetricName, float]) -> None:
+        if self.state is None:
+            return
+
+        updated_user = self.backend.update_user_info(
+            user_id=self.state.logged_user.user_id,
+            metrics=metrics,
+        )
+        self.state.logged_user = updated_user
+        self.state.users = [
+            updated_user if user.user_id == updated_user.user_id else user
+            for user in self.state.users
+        ]
+
+        if self.state.selected_candidate.user_id == updated_user.user_id:
+            self.state.selected_candidate = updated_user
+
+        self.state.is_editing_metrics = False
         self._render()

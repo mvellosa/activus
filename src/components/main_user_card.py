@@ -47,6 +47,7 @@ class MainUserCard(ft.Card):
                     size=138,
                     stroke_width=15,
                     center_content=UserAvatar(self.user, size=92),
+                    toggle_center_content=True,
                     gradient_colors=("#6322C6", "#07484D"),
                     interactive=True,
                 )

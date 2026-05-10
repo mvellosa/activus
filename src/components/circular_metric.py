@@ -22,6 +22,7 @@ class CircularMetric(ft.Container):
         stroke_width: int = 4,
         show_number: bool = False,
         center_content: ft.Control | None = None,
+        toggle_center_content: bool = False,
         gradient_colors: Sequence[str] | None = None,
         clockwise: bool = False,
         interactive: bool = True,
@@ -33,6 +34,7 @@ class CircularMetric(ft.Container):
         self._stroke_width = stroke_width
         self._show_number = show_number
         self._center_content = center_content
+        self._toggle_center_content = toggle_center_content
         self._gradient_colors = tuple(gradient_colors or self._DEFAULT_GRADIENT_COLORS)
         self._clockwise = clockwise
         self._on_click = on_click
@@ -58,7 +60,7 @@ class CircularMetric(ft.Container):
         )
 
     def _build_center_content(self) -> ft.Control:
-        if self._center_content is not None:
+        if self._center_content is not None and not self._show_number:
             return self._center_content
 
         if self._show_number:
@@ -114,7 +116,7 @@ class CircularMetric(ft.Container):
         self.update()
 
     def _handle_click(self, _: ft.ControlEvent) -> None:
-        if self._center_content is None:
+        if self._center_content is None or self._toggle_center_content:
             self._show_number = not self._show_number
         self.content = self._build_content()
         if self._on_click is not None:

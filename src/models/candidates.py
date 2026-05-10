@@ -13,6 +13,7 @@ class MetricName(StrEnum):
     M1 = "M1"
     M2 = "M2"
     M3 = "M3"
+    M4 = "M4"
 
 
 @dataclass(frozen=True)
@@ -38,9 +39,29 @@ class UserDetails:
     final_score: float
 
 
+@dataclass(frozen=True)
+class MetricHistoryEntry:
+    """Snapshot of user metrics for a specific date."""
+
+    date: str
+    metrics: dict[MetricName, float]
+
+
 class CandidatesBackend(Protocol):
     """Small backend contract used by the UI."""
 
     def get_candidates(self) -> list[UserDetails]:
         """Return all available candidates."""
+        ...
+
+    def update_user_info(
+        self,
+        user_id: str,
+        metrics: dict[MetricName, float],
+    ) -> UserDetails:
+        """Update a user's metric values and return the updated user."""
+        ...
+
+    def get_history(self, user_id: str) -> list[MetricHistoryEntry]:
+        """Return past metric snapshots for the user, newest first."""
         ...

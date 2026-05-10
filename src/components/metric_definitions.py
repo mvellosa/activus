@@ -8,6 +8,7 @@ METRIC_DEFINITIONS: tuple[tuple[MetricName, ft.IconData, str], ...] = (
     (MetricName.M1, ft.Icons.TIMER_OUTLINED, "#29B6F6"),
     (MetricName.M2, ft.Icons.SPEED_OUTLINED, "#FF9800"),
     (MetricName.M3, ft.Icons.STAR_BORDER_OUTLINED, "#FFD54F"),
+    (MetricName.M4, ft.Icons.TRENDING_UP_OUTLINED, "#35C28F"),
 )
 
 

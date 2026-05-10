@@ -1,3 +1,15 @@
-from .candidates import CandidatesBackend, Metric, MetricName, UserDetails
+from .candidates import (
+    CandidatesBackend,
+    Metric,
+    MetricHistoryEntry,
+    MetricName,
+    UserDetails,
+)
 
-__all__ = ["CandidatesBackend", "Metric", "MetricName", "UserDetails"]
+__all__ = [
+    "CandidatesBackend",
+    "Metric",
+    "MetricHistoryEntry",
+    "MetricName",
+    "UserDetails",
+]
