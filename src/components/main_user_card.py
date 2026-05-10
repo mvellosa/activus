@@ -1,6 +1,7 @@
 import flet as ft
 
 from models import Metric, UserDetails
+from theme import SURFACE_COLOR
 
 from .circular_metric import CircularMetric
 from .metric_definitions import build_metrics
@@ -14,8 +15,8 @@ class MainUserCard(ft.Card):
         super().__init__()
         self.user = user
         self.elevation = 4
-        self.color = "#FFFFFF"
-        self.surface_tint_color = "#FFFFFF"
+        self.color = SURFACE_COLOR
+        self.surface_tint_color = SURFACE_COLOR
         self.shape = ft.RoundedRectangleBorder(radius=24)
         self.content = self._build_content()
 
@@ -27,13 +28,13 @@ class MainUserCard(ft.Card):
                 spacing=16,
                 horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 controls=[
-                    self.big_user_metric(),
-                    self.small_user_metrics(),
+                    self.__big_user_metric(),
+                    self.__small_user_metrics(),
                 ],
             ),
         )
 
-    def big_user_metric(self) -> ft.Row:
+    def __big_user_metric(self) -> ft.Row:
         return ft.Row(
             alignment=ft.MainAxisAlignment.CENTER,
             controls=[
@@ -47,12 +48,12 @@ class MainUserCard(ft.Card):
                     stroke_width=15,
                     center_content=UserAvatar(self.user, size=92),
                     gradient_colors=("#6322C6", "#07484D"),
-                    interactive=False,
+                    interactive=True,
                 )
             ],
         )
 
-    def small_user_metrics(self) -> ft.Row:
+    def __small_user_metrics(self) -> ft.Row:
         metrics = build_metrics(self.user.metrics)
         return ft.Row(
             alignment=ft.MainAxisAlignment.SPACE_EVENLY,

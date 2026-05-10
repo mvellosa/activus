@@ -1,6 +1,7 @@
 import flet as ft
 
 from models import UserDetails
+from theme import AVATAR_PLACEHOLDER_COLOR
 
 
 class UserAvatar(ft.Container):
@@ -12,7 +13,7 @@ class UserAvatar(ft.Container):
         self.height = size
         self.border_radius = size // 2
         self.clip_behavior = ft.ClipBehavior.ANTI_ALIAS
-        self.bgcolor = "#D8D8D8"
+        self.bgcolor = AVATAR_PLACEHOLDER_COLOR
         self.alignment = ft.Alignment(0, 0)
         self.content = self._build_content(user=user, size=size)
 

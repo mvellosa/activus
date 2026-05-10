@@ -5,6 +5,7 @@ from typing import Callable
 import flet as ft
 
 from models import Metric, UserDetails
+from theme import BORDER_COLOR, CARD_SHADOW, TEXT_MUTED_COLOR, TEXT_PRIMARY_COLOR
 
 from .circular_metric import CircularMetric
 from .user_avatar import UserAvatar
@@ -27,13 +28,8 @@ class UserListItem(ft.Container):
         self.border_radius = 14
         self.padding = ft.Padding(left=12, top=10, right=12, bottom=10)
         self.bgcolor = "#F7F5FC" if selected else "#FFFFFF"
-        self.border = ft.Border.all(1, "#E9E4F2") if selected else None
-        self.shadow = ft.BoxShadow(
-            spread_radius=0,
-            blur_radius=10,
-            color="#1600211A",
-            offset=ft.Offset(0, 3),
-        )
+        self.border = ft.Border.all(1, BORDER_COLOR) if selected else None
+        self.shadow = CARD_SHADOW
         self.content = self._build_content()
 
     def _build_content(self) -> ft.Row:
@@ -49,12 +45,12 @@ class UserListItem(ft.Container):
                             self.user.name,
                             size=13,
                             weight=ft.FontWeight.BOLD,
-                            color="#2D253C",
+                            color=TEXT_PRIMARY_COLOR,
                         ),
                         ft.Text(
                             self.user.subtitle,
                             size=10,
-                            color="#9A95A5",
+                            color=TEXT_MUTED_COLOR,
                         ),
                     ],
                 ),

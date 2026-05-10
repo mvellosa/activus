@@ -6,13 +6,14 @@ from typing import Callable, Sequence
 import flet as ft
 
 from models import Metric
+from theme import RING_GRADIENT, TEXT_PRIMARY_COLOR, TRACK_COLOR
 
 
 class CircularMetric(ft.Container):
     """Reusable clickable circular progress component."""
 
-    _TRACK_COLOR = "#ECE9F4"
-    _DEFAULT_GRADIENT_COLORS = ("#6322C6", "#FF8A00")
+    _TRACK_COLOR = TRACK_COLOR
+    _DEFAULT_GRADIENT_COLORS = RING_GRADIENT
 
     def __init__(
         self,
@@ -66,7 +67,7 @@ class CircularMetric(ft.Container):
                 size=max(10, self._size // 3),
                 weight=ft.FontWeight.BOLD,
                 font_family="Roboto",
-                color="#303030",
+                color=TEXT_PRIMARY_COLOR,
             )
 
         return ft.Icon(

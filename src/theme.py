@@ -1,0 +1,21 @@
+from __future__ import annotations
+
+import flet as ft
+
+APP_BG_COLOR = "#F5F2FA"
+SURFACE_COLOR = "#FFFFFF"
+PRIMARY_COLOR = "#6322C6"
+PRIMARY_DARK_COLOR = "#3E0A88"
+TEXT_PRIMARY_COLOR = "#2D253C"
+TEXT_MUTED_COLOR = "#9A95A5"
+TRACK_COLOR = "#ECE9F4"
+BORDER_COLOR = "#E9E4F2"
+AVATAR_PLACEHOLDER_COLOR = "#D8D8D8"
+RING_GRADIENT = (PRIMARY_COLOR, "#FF8A00")
+PROFILE_BANNER_GRADIENT = (PRIMARY_COLOR, PRIMARY_DARK_COLOR)
+CARD_SHADOW = ft.BoxShadow(
+    spread_radius=0,
+    blur_radius=12,
+    color="#1600211A",
+    offset=ft.Offset(0, 4),
+)
