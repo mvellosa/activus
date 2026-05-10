@@ -35,6 +35,8 @@ class MainUserCard(ft.Card):
         )
 
     def __big_user_metric(self) -> ft.Row:
+        _size = 138
+        _stroke_width = int(_size * 0.07)
         return ft.Row(
             alignment=ft.MainAxisAlignment.CENTER,
             controls=[
@@ -44,8 +46,8 @@ class MainUserCard(ft.Card):
                         value=self.user.main_metric,
                         icon=ft.Icons.PERSON,
                     ),
-                    size=138,
-                    stroke_width=15,
+                    size=_size,
+                    stroke_width=(_stroke_width),
                     center_content=UserAvatar(self.user, size=92),
                     toggle_center_content=True,
                     gradient_colors=("#6322C6", "#07484D"),
@@ -59,7 +61,7 @@ class MainUserCard(ft.Card):
         return ft.Row(
             alignment=ft.MainAxisAlignment.SPACE_EVENLY,
             controls=[
-                CircularMetric(metric=metric, size=58, stroke_width=7)
+                CircularMetric(metric=metric, size=58, stroke_width=5)
                 for metric in metrics
             ],
         )

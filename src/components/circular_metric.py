@@ -20,7 +20,7 @@ class CircularMetric(ft.Container):
         self,
         metric: Metric,
         size: int = 54,
-        stroke_width: int = 10,
+        stroke_width: int = 2,
         show_number: bool = False,
         center_content: ft.Control | None = None,
         toggle_center_content: bool = False,
