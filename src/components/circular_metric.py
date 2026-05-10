@@ -4,6 +4,7 @@ import math
 from typing import Callable, Sequence
 
 import flet as ft
+import flet.canvas as cv
 
 from models import Metric
 from theme import RING_GRADIENT, TEXT_PRIMARY_COLOR, TRACK_COLOR
@@ -19,7 +20,7 @@ class CircularMetric(ft.Container):
         self,
         metric: Metric,
         size: int = 54,
-        stroke_width: int = 4,
+        stroke_width: int = 10,
         show_number: bool = False,
         center_content: ft.Control | None = None,
         toggle_center_content: bool = False,
@@ -79,35 +80,114 @@ class CircularMetric(ft.Container):
         )
 
     def _build_progress_ring(self) -> ft.Stack:
+        progress_value = self._clamp_progress(self.metric.value)
+
         return ft.Stack(
             width=self._size,
             height=self._size,
             controls=[
-                ft.ProgressRing(
-                    value=1,
+                cv.Canvas(
                     width=self._size,
                     height=self._size,
-                    stroke_width=self._stroke_width,
-                    color=self._TRACK_COLOR,
-                    bgcolor="transparent",
-                ),
-                ft.ShaderMask(
-                    blend_mode=ft.BlendMode.SRC_IN,
-                    shader=ft.SweepGradient(
-                        colors=list(self._gradient_colors),
-                        rotation=-math.pi / 2,
-                    ),
-                    flip=None if self._clockwise else ft.Flip(flip_x=True),
-                    content=ft.ProgressRing(
-                        value=self.metric.value,
-                        width=self._size,
-                        height=self._size,
-                        stroke_width=self._stroke_width,
-                        color="#FFFFFF",
-                        bgcolor="transparent",
-                    ),
+                    shapes=[
+                        self._build_track_shape(),
+                        *self._build_progress_shapes(progress_value),
+                    ],
                 ),
             ],
+        )
+
+    def _build_track_shape(self) -> cv.Oval:
+        inset = self._stroke_width / 2
+        diameter = self._size - self._stroke_width
+
+        return cv.Oval(
+            inset,
+            inset,
+            diameter,
+            diameter,
+            paint=ft.Paint(
+                color=self._TRACK_COLOR,
+                stroke_width=self._stroke_width,
+                style=ft.PaintingStyle.STROKE,
+                stroke_cap=ft.StrokeCap.BUTT,
+            ),
+        )
+
+    def _build_progress_shapes(self, value: float) -> list[cv.Arc]:
+        if value <= 0:
+            return []
+
+        inset = self._stroke_width / 2
+        diameter = self._size - self._stroke_width
+        direction = 1 if self._clockwise else -1
+        total_sweep = direction * value * math.tau
+        segment_count = self._segment_count(value)
+
+        return [
+            cv.Arc(
+                inset,
+                inset,
+                diameter,
+                diameter,
+                start_angle=(-math.pi / 2) + (total_sweep * index / segment_count),
+                sweep_angle=total_sweep / segment_count,
+                use_center=False,
+                paint=ft.Paint(
+                    color=self._color_at(index / max(1, segment_count - 1)),
+                    stroke_width=self._stroke_width,
+                    style=ft.PaintingStyle.STROKE,
+                    stroke_cap=ft.StrokeCap.BUTT,
+                ),
+            )
+            for index in range(segment_count)
+        ]
+
+    def _segment_count(self, value: float) -> int:
+        arc_length = self._size * math.pi * value
+        return max(8, min(96, math.ceil(arc_length / 3)))
+
+    def _color_at(self, position: float) -> str:
+        colors = self._gradient_colors
+        if len(colors) == 1:
+            return colors[0]
+
+        scaled_position = self._clamp_progress(position) * (len(colors) - 1)
+        start_index = min(math.floor(scaled_position), len(colors) - 2)
+        end_index = start_index + 1
+        local_position = scaled_position - start_index
+
+        return self._interpolate_hex_color(
+            colors[start_index],
+            colors[end_index],
+            local_position,
+        )
+
+    @staticmethod
+    def _clamp_progress(value: float) -> float:
+        return max(0, min(1, value))
+
+    @staticmethod
+    def _interpolate_hex_color(start: str, end: str, position: float) -> str:
+        start_rgb = CircularMetric._hex_to_rgb(start)
+        end_rgb = CircularMetric._hex_to_rgb(end)
+        rgb = tuple(
+            round(start_channel + (end_channel - start_channel) * position)
+            for start_channel, end_channel in zip(start_rgb, end_rgb)
+        )
+
+        return "#{:02X}{:02X}{:02X}".format(*rgb)
+
+    @staticmethod
+    def _hex_to_rgb(color: str) -> tuple[int, int, int]:
+        normalized = color.removeprefix("#")
+        if len(normalized) == 3:
+            normalized = "".join(channel * 2 for channel in normalized)
+
+        return (
+            int(normalized[0:2], 16),
+            int(normalized[2:4], 16),
+            int(normalized[4:6], 16),
         )
 
     def set_show_number(self, show_number: bool) -> None:
