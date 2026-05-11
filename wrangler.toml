@@ -1,0 +1,6 @@
+name = "activus-app"
+compatibility_date = "2026-05-11"
+
+[assets]
+directory = "./build/web"
+not_found_handling = "single-page-application"

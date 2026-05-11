@@ -1,0 +1,24 @@
+{
+  "name": "activus",
+  "version": "1.0.0",
+  "description": "Run as a desktop app:",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mvellosa/activus.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mvellosa/activus/issues"
+  },
+  "homepage": "https://github.com/mvellosa/activus#readme",
+  "devDependencies": {
+    "wrangler": "^4.90.0"
+  }
+}
