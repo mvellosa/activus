@@ -35,7 +35,11 @@ class MetricsForm(ft.Container):
         self.padding = 18
         self.content = ft.Column(
             spacing=14,
-            controls=[
+            controls=self._build_metrics_form_control(on_cancel),
+        )
+
+    def _build_metrics_form_control(self, on_cancel):
+        return [
                 ft.Text(
                     "Atualizar metricas",
                     size=18,
@@ -56,17 +60,16 @@ class MetricsForm(ft.Container):
                             "Cancelar",
                             on_click=lambda _: on_cancel(),
                         ),
-                        ft.ElevatedButton(
+                        ft.Button(
                             "Salvar",
                             icon=ft.Icons.SAVE_OUTLINED,
                             bgcolor=PRIMARY_COLOR,
                             color="#FFFFFF",
-                            on_click=self._handle_submit,
+                            on_click=self._handle_submit, # pyright: ignore[reportArgumentType]
                         ),
                     ],
                 ),
-            ],
-        )
+            ]
 
     def _build_field(self, metric_name: MetricName, value: float) -> ft.TextField:
         return ft.TextField(
