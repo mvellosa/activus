@@ -203,3 +203,67 @@ Follow the patterns already present in the codebase.
 - The app currently uses `MockCandidatesBackend` for local data.
 - Build artifacts in `dist-web/` should not be treated as source of truth.
 - The source of truth for app behavior is under `src/`.
+
+## Redeploying the Flet Web App to Cloudflare:
+
+Use these steps whenever a new version of the Flet app needs to be deployed.
+
+### 1. Open the project folder
+
+cd path/to/your/flet-project
+
+### 2. Make sure dependencies are installed
+
+python -m pip install -U "flet[all]==0.85.0"
+npm install
+
+### 3. Test the app locally in web mode
+
+flet run --web .
+
+Check the app in the browser and confirm the changes work.
+
+### 4. Build the static web version
+
+flet build web . --route-url-strategy path --base-url /
+
+This generates the deployable web app in:
+
+build/web
+
+### 5. Test the production build locally
+
+flet serve
+
+Open:
+
+http://localhost:8000
+
+Confirm the built version works correctly.
+
+### 6. Deploy to Cloudflare
+
+npx wrangler deploy
+
+### 7. Verify the live app
+
+Open the deployed Cloudflare URL, usually something like:
+
+https://activus-app.mvellosaa.workers.dev
+
+Also test it on a mobile phone.
+
+## Full redeploy command sequence
+
+cd path/to/your/flet-project
+python -m pip install -U "flet[all]==0.85.0"
+npm install
+flet run --web .
+flet build web . --route-url-strategy path --base-url /
+flet serve
+npx wrangler deploy
+
+## Quick redeploy after small changes
+
+flet build web . --route-url-strategy path --base-url /
+npx wrangler deploy
