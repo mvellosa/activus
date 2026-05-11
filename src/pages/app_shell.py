@@ -10,6 +10,7 @@ from theme import APP_BG_COLOR
 from .competition_page import CompetitionPage
 from .metrics_form_page import MetricsFormPage
 from .profile_page import ProfilePage
+from .rewards_page import RewardsPage
 
 
 class CompetitionApp:
@@ -55,6 +56,17 @@ class CompetitionApp:
                 on_cancel=self.close_metrics_form,
             )
             controls = [body]
+        elif self.state.is_viewing_rewards:
+            body = RewardsPage(
+                rewards=self.backend.get_rewards(self.state.selected_competition_id),
+            )
+            controls = [
+                body,
+                BottomNav(
+                    selected_tab=self.state.selected_tab,
+                    on_change=self.change_tab,
+                ),
+            ]
         elif self.state.selected_tab == AppTab.PROFILE:
             body = ProfilePage(
                 self.state,
@@ -68,7 +80,11 @@ class CompetitionApp:
                 ),
             ]
         else:
-            body = CompetitionPage(self.state, on_select_user=self.select_user)
+            body = CompetitionPage(
+                self.state,
+                on_select_user=self.select_user,
+                on_open_rewards=self.open_rewards,
+            )
             controls = [
                 body,
                 BottomNav(
@@ -97,11 +113,15 @@ class CompetitionApp:
         self._render()
 
     def change_tab(self, tab: AppTab) -> None:
-        if self.state is None or self.state.selected_tab == tab:
+        if self.state is None:
+            return
+
+        if self.state.selected_tab == tab and not self.state.is_viewing_rewards:
             return
 
         self.state.selected_tab = tab
         self.state.is_editing_metrics = False
+        self.state.is_viewing_rewards = False
         self._render()
 
     def open_metrics_form(self) -> None:
@@ -109,6 +129,16 @@ class CompetitionApp:
             return
 
         self.state.is_editing_metrics = True
+        self.state.is_viewing_rewards = False
+        self._render()
+
+    def open_rewards(self) -> None:
+        if self.state is None:
+            return
+
+        self.state.selected_tab = AppTab.COMPETITION
+        self.state.is_editing_metrics = False
+        self.state.is_viewing_rewards = True
         self._render()
 
     def close_metrics_form(self) -> None:

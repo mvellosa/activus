@@ -18,3 +18,5 @@ class AppState:
     users: list[UserDetails]
     selected_tab: AppTab = AppTab.PROFILE
     is_editing_metrics: bool = False
+    is_viewing_rewards: bool = False
+    selected_competition_id: str = "competition_main"

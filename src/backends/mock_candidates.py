@@ -3,7 +3,7 @@ from __future__ import annotations
 import random
 from datetime import date, timedelta
 
-from models import MetricHistoryEntry, MetricName, UserDetails
+from models import MetricHistoryEntry, MetricName, Reward, UserDetails
 
 
 def _score_from_metrics(metrics: dict[MetricName, float]) -> float:
@@ -21,6 +21,76 @@ class MockCandidatesBackend:
         self._history = {
             user.user_id: self._build_history(user.metrics)
             for user in self._users
+        }
+        self._rewards_by_competition = {
+            "competition_main": [
+                Reward(
+                    title="Smartwatch",
+                    type="podium",
+                    picture_url="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=320&q=80",
+                    condition="1o lugar",
+                ),
+                Reward(
+                    title="Kit Fitness",
+                    type="completion",
+                    picture_url="https://images.unsplash.com/photo-1598289431512-b97b0917affc?auto=format&fit=crop&w=320&q=80",
+                    condition="Completar a competicao",
+                ),
+                Reward(
+                    title="Garrafa esportiva",
+                    type="top_three",
+                    picture_url="https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=320&q=80",
+                    condition="Top 3 colocados",
+                ),
+                Reward(
+                    title="Vale-presente",
+                    type="participation",
+                    picture_url="https://images.unsplash.com/photo-1607083206869-4c7672e72a8a?auto=format&fit=crop&w=320&q=80",
+                    condition="Participar de todos os desafios",
+                ),
+                Reward(
+                    title="Medalha especial",
+                    type="streak",
+                    picture_url="https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?auto=format&fit=crop&w=320&q=80",
+                    condition="Maior sequencia de atividade",
+                ),
+                Reward(
+                    title="Fone Bluetooth",
+                    type="top_three",
+                    picture_url="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=320&q=80",
+                    condition="Top 5 no ranking geral",
+                ),
+                Reward(
+                    title="Mochila esportiva",
+                    type="completion",
+                    picture_url="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=320&q=80",
+                    condition="Concluir 4 semanas seguidas",
+                ),
+                Reward(
+                    title="Camiseta premium",
+                    type="participation",
+                    picture_url="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=320&q=80",
+                    condition="Registrar atividade em 10 dias",
+                ),
+                Reward(
+                    title="Assinatura fitness",
+                    type="streak",
+                    picture_url="https://images.unsplash.com/photo-1571019613914-85f342c6a11e?auto=format&fit=crop&w=320&q=80",
+                    condition="Manter frequencia acima de 80%",
+                ),
+                Reward(
+                    title="Trofeu da equipe",
+                    type="podium",
+                    picture_url="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=320&q=80",
+                    condition="Equipe com maior pontuacao",
+                ),
+                Reward(
+                    title="Cupom nutricional",
+                    type="participation",
+                    picture_url="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=320&q=80",
+                    condition="Participar dos desafios semanais",
+                ),
+            ]
         }
 
     @staticmethod
@@ -111,3 +181,6 @@ class MockCandidatesBackend:
 
     def get_history(self, user_id: str) -> list[MetricHistoryEntry]:
         return self._history.get(user_id, []).copy()
+
+    def get_rewards(self, competition_id: str) -> list[Reward]:
+        return self._rewards_by_competition.get(competition_id, []).copy()

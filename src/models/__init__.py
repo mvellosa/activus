@@ -3,6 +3,7 @@ from .candidates import (
     Metric,
     MetricHistoryEntry,
     MetricName,
+    Reward,
     UserDetails,
 )
 
@@ -11,5 +12,6 @@ __all__ = [
     "Metric",
     "MetricHistoryEntry",
     "MetricName",
+    "Reward",
     "UserDetails",
 ]

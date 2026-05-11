@@ -5,6 +5,7 @@ from .metrics_form import MetricsForm
 from .metric_tile import MetricTile
 from .metrics_grid import MetricsGrid
 from .profile_header import ProfileHeader
+from .reward_card import RewardCard
 from .section_title import SectionTitle
 from .user_avatar import UserAvatar
 from .user_list_item import UserListItem
@@ -18,6 +19,7 @@ __all__ = [
     "MetricTile",
     "MetricsGrid",
     "ProfileHeader",
+    "RewardCard",
     "SectionTitle",
     "UserAvatar",
     "UserListItem",

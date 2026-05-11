@@ -47,6 +47,16 @@ class MetricHistoryEntry:
     metrics: dict[MetricName, float]
 
 
+@dataclass(frozen=True)
+class Reward:
+    """Reward offered for a competition."""
+
+    title: str
+    type: str
+    picture_url: str
+    condition: str
+
+
 class CandidatesBackend(Protocol):
     """Small backend contract used by the UI."""
 
@@ -64,4 +74,8 @@ class CandidatesBackend(Protocol):
 
     def get_history(self, user_id: str) -> list[MetricHistoryEntry]:
         """Return past metric snapshots for the user, newest first."""
+        ...
+
+    def get_rewards(self, competition_id: str) -> list[Reward]:
+        """Return rewards available for a competition."""
         ...
