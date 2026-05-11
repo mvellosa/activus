@@ -10,10 +10,10 @@ import flet as ft
 class MetricName(StrEnum):
     """Fixed metric identifiers supported by the app."""
 
-    M1 = "M1"
-    M2 = "M2"
-    M3 = "M3"
-    M4 = "M4"
+    VITALIDADE = "Vitalidade"
+    CARGA = "Carga"
+    REPOUSO = "Repouso"
+    ANIMO = "Animo"
 
 
 @dataclass(frozen=True)

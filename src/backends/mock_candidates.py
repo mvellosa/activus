@@ -97,10 +97,10 @@ class MockCandidatesBackend:
     def create_candidate(i: int) -> UserDetails:
         user_letter = chr(ord("A") + i)
         metrics = {
-            MetricName.M1: random.random(),
-            MetricName.M2: random.random(),
-            MetricName.M3: random.random(),
-            MetricName.M4: random.random(),
+            MetricName.VITALIDADE: random.random(),
+            MetricName.CARGA: random.random(),
+            MetricName.REPOUSO: random.random(),
+            MetricName.ANIMO: random.random(),
         }
         score = _score_from_metrics(metrics)
 

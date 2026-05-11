@@ -5,10 +5,10 @@ import flet as ft
 from models import Metric, MetricName
 
 METRIC_DEFINITIONS: tuple[tuple[MetricName, ft.IconData, str], ...] = (
-    (MetricName.M1, ft.Icons.TIMER_OUTLINED, "#29B6F6"),
-    (MetricName.M2, ft.Icons.SPEED_OUTLINED, "#FF9800"),
-    (MetricName.M3, ft.Icons.STAR_BORDER_OUTLINED, "#FFD54F"),
-    (MetricName.M4, ft.Icons.TRENDING_UP_OUTLINED, "#35C28F"),
+    (MetricName.VITALIDADE, ft.Icons.FAVORITE_BORDER_OUTLINED, "#E85D75"),
+    (MetricName.CARGA, ft.Icons.FITNESS_CENTER_OUTLINED, "#FF9800"),
+    (MetricName.REPOUSO, ft.Icons.HOTEL_OUTLINED, "#29B6F6"),
+    (MetricName.ANIMO, ft.Icons.MOOD_OUTLINED, "#35C28F"),
 )
 
 

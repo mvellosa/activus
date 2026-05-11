@@ -42,18 +42,31 @@ class ProfilePage(ft.Container):
                     shadow=CARD_SHADOW,
                     padding=24,
                     alignment=ft.Alignment(0, 0),
-                    content=CircularMetric(
-                        metric=Metric(
-                            label="Geral",
-                            value=user.main_metric,
-                            icon=ft.Icons.EMOJI_EVENTS_OUTLINED,
-                            color="#FF8A00",
-                        ),
-                        size=104,
-                        stroke_width=8,
-                        show_number=True,
-                        interactive=False,
-                        gradient_colors=RING_GRADIENT,
+                    content=ft.Column(
+                        spacing=8,
+                        horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        controls=[
+                            CircularMetric(
+                                metric=Metric(
+                                    label="Geral",
+                                    value=user.main_metric,
+                                    icon=ft.Icons.EMOJI_EVENTS_OUTLINED,
+                                    color="#FF8A00",
+                                ),
+                                size=104,
+                                stroke_width=8,
+                                show_number=True,
+                                interactive=False,
+                                gradient_colors=RING_GRADIENT,
+                            ),
+                            ft.Text(
+                                "readiness",
+                                size=11,
+                                weight=ft.FontWeight.W_500,
+                                color="#FF8A00",
+                                text_align=ft.TextAlign.CENTER,
+                            ),
+                        ],
                     ),
                 ),
             ],

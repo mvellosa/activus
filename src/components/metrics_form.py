@@ -47,7 +47,7 @@ class MetricsForm(ft.Container):
                     color=TEXT_PRIMARY_COLOR,
                 ),
                 ft.Text(
-                    "Informe valores de 0 a 100 para M1, M2, M3 e M4.",
+                    "Informe valores de 0 a 100 para Vitalidade, Carga, Repouso e Animo.",
                     size=12,
                     color=TEXT_MUTED_COLOR,
                 ),
