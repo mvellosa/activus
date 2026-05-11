@@ -6,7 +6,7 @@ import flet as ft
 
 from components import MetricsForm, SectionTitle
 from components.metric_definitions import METRIC_DEFINITIONS
-from models import MetricHistoryEntry, MetricName, UserDetails
+from models import DailyMetricInputs, MetricHistoryEntry, MetricName, UserDetails
 from theme import (
     BORDER_COLOR,
     CARD_SHADOW,
@@ -21,7 +21,7 @@ class MetricsFormPage(ft.Container):
         self,
         user: UserDetails,
         history: list[MetricHistoryEntry],
-        on_submit: Callable[[dict[MetricName, float]], None],
+        on_submit: Callable[[DailyMetricInputs], None],
         on_cancel: Callable[[], None],
     ) -> None:
         super().__init__()
@@ -33,7 +33,7 @@ class MetricsFormPage(ft.Container):
             controls=[
                 self._build_header(on_cancel),
                 MetricsForm(
-                    values=user.metrics,
+                    values=user.metric_inputs,
                     on_submit=on_submit,
                     on_cancel=on_cancel,
                 ),
@@ -94,7 +94,7 @@ class MetricsFormPage(ft.Container):
             spacing=10,
             controls=[
                 ft.Text(
-                    entry.date,
+                    f"{entry.date} · Geral {round(entry.final_score * 100)}",
                     size=12,
                     weight=ft.FontWeight.W_600,
                     color=TEXT_MUTED_COLOR,

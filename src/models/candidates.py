@@ -13,7 +13,17 @@ class MetricName(StrEnum):
     VITALIDADE = "Vitalidade"
     CARGA = "Carga"
     REPOUSO = "Repouso"
-    ANIMO = "Animo"
+    ANIMO = "Ânimo"
+
+
+class MoodLevel(StrEnum):
+    """Subjective mood options used by the readiness formula."""
+
+    OTIMO = "Ótimo"
+    BEM = "Bem"
+    NEUTRO = "Neutro"
+    MAL = "Mal"
+    PESSIMO = "Péssimo"
 
 
 @dataclass(frozen=True)
@@ -27,6 +37,20 @@ class Metric:
 
 
 @dataclass(frozen=True)
+class DailyMetricInputs:
+    """Raw daily values collected to calculate the readiness metrics."""
+
+    rmssd_day: float
+    rmssd_baseline: float
+    acute_load: float
+    chronic_load: float
+    total_sleep_hours: float
+    sleep_efficiency: float
+    deep_sleep_percent: float
+    mood: MoodLevel
+
+
+@dataclass(frozen=True)
 class UserDetails:
     """Contract returned by the backend for each candidate/user."""
 
@@ -34,6 +58,7 @@ class UserDetails:
     name: str
     subtitle: str
     image_url: str | None
+    metric_inputs: DailyMetricInputs
     main_metric: float
     metrics: dict[MetricName, float]
     final_score: float
@@ -45,6 +70,7 @@ class MetricHistoryEntry:
 
     date: str
     metrics: dict[MetricName, float]
+    final_score: float
 
 
 @dataclass(frozen=True)
@@ -67,9 +93,9 @@ class CandidatesBackend(Protocol):
     def update_user_info(
         self,
         user_id: str,
-        metrics: dict[MetricName, float],
+        metric_inputs: DailyMetricInputs,
     ) -> UserDetails:
-        """Update a user's metric values and return the updated user."""
+        """Update a user's raw metric inputs and return the updated user."""
         ...
 
     def get_history(self, user_id: str) -> list[MetricHistoryEntry]:

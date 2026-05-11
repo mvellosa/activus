@@ -4,7 +4,7 @@ import flet as ft
 
 from app_state import AppState, AppTab
 from components import BottomNav
-from models import CandidatesBackend, MetricName, UserDetails
+from models import CandidatesBackend, DailyMetricInputs, UserDetails
 from theme import APP_BG_COLOR
 
 from .competition_page import CompetitionPage
@@ -148,13 +148,13 @@ class CompetitionApp:
         self.state.is_editing_metrics = False
         self._render()
 
-    def update_logged_user_metrics(self, metrics: dict[MetricName, float]) -> None:
+    def update_logged_user_metrics(self, metric_inputs: DailyMetricInputs) -> None:
         if self.state is None:
             return
 
         updated_user = self.backend.update_user_info(
             user_id=self.state.logged_user.user_id,
-            metrics=metrics,
+            metric_inputs=metric_inputs,
         )
         self.state.logged_user = updated_user
         self.state.users = [
