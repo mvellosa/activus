@@ -31,7 +31,7 @@ class CompetitionApp:
         self.state = AppState(
             logged_user=logged_user,
             selected_candidate=logged_user,
-            users=users,
+            users=self._rank_users(users),
         )
         self.page = page
 
@@ -157,13 +157,19 @@ class CompetitionApp:
             metric_inputs=metric_inputs,
         )
         self.state.logged_user = updated_user
-        self.state.users = [
-            updated_user if user.user_id == updated_user.user_id else user
-            for user in self.state.users
-        ]
+        self.state.users = self._rank_users(
+            [
+                updated_user if user.user_id == updated_user.user_id else user
+                for user in self.state.users
+            ]
+        )
 
         if self.state.selected_candidate.user_id == updated_user.user_id:
             self.state.selected_candidate = updated_user
 
         self.state.is_editing_metrics = False
         self._render()
+
+    @staticmethod
+    def _rank_users(users: list[UserDetails]) -> list[UserDetails]:
+        return sorted(users, key=lambda user: user.final_score, reverse=True)

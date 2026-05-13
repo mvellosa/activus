@@ -10,6 +10,8 @@ from theme import CARD_SHADOW
 
 
 class CompetitionPage(ft.Container):
+    _CARD_COMPRESSION_SCROLL_DISTANCE = 140
+
     def __init__(
         self,
         state: AppState,
@@ -17,6 +19,7 @@ class CompetitionPage(ft.Container):
         on_open_rewards: Callable[[], None],
     ) -> None:
         super().__init__()
+        self._main_user_card = MainUserCard(state.selected_candidate)
         self.expand = True
         self.padding = ft.Padding(left=12, top=16, right=12, bottom=0)
         self.content = ft.Stack(
@@ -38,7 +41,7 @@ class CompetitionPage(ft.Container):
                 SectionTitle("Competicao"),
                 ft.Container(
                     alignment=ft.Alignment(0, 0),
-                    content=MainUserCard(state.selected_candidate),
+                    content=self._main_user_card,
                 ),
                 SectionTitle("Social"),
                 ft.Container(
@@ -46,6 +49,7 @@ class CompetitionPage(ft.Container):
                     padding=ft.Padding(left=6, top=0, right=6, bottom=0),
                     content=ft.Column(
                         scroll=ft.ScrollMode.AUTO,
+                        on_scroll=self._handle_users_scroll,
                         spacing=0,
                         controls=[
                             UsersList(
@@ -58,6 +62,10 @@ class CompetitionPage(ft.Container):
                 ),
             ],
         )
+
+    def _handle_users_scroll(self, event: ft.OnScrollEvent) -> None:
+        compression = event.pixels / self._CARD_COMPRESSION_SCROLL_DISTANCE
+        self._main_user_card.set_compression(compression)
 
     def _build_rewards_button(self, on_open_rewards: Callable[[], None]) -> ft.Container:
         return ft.Container(

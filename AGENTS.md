@@ -203,6 +203,8 @@ Follow the patterns already present in the codebase.
 - The app currently uses `MockCandidatesBackend` for local data.
 - Build artifacts in `dist-web/` should not be treated as source of truth.
 - The source of truth for app behavior is under `src/`.
+- Python/Flet commands in this project should be run through `uv`, for example `uv run flet run`.
+- On Windows PowerShell, use `npm.cmd` and `npx.cmd` if `npm`/`npx` are blocked by the execution policy.
 
 ## Redeploying the Flet Web App to Cloudflare:
 
@@ -214,18 +216,18 @@ cd path/to/your/flet-project
 
 ### 2. Make sure dependencies are installed
 
-python -m pip install -U "flet[all]==0.85.0"
-npm install
+uv sync
+npm.cmd install
 
 ### 3. Test the app locally in web mode
 
-flet run --web .
+uv run flet run --web .
 
 Check the app in the browser and confirm the changes work.
 
 ### 4. Build the static web version
 
-flet build web . --route-url-strategy path --base-url /
+$env:PYTHONIOENCODING='utf-8'; $env:PYTHONUTF8='1'; uv run flet build web . --route-url-strategy path --base-url /
 
 This generates the deployable web app in:
 
@@ -233,7 +235,7 @@ build/web
 
 ### 5. Test the production build locally
 
-flet serve
+uv run flet serve
 
 Open:
 
@@ -243,7 +245,7 @@ Confirm the built version works correctly.
 
 ### 6. Deploy to Cloudflare
 
-npx wrangler deploy
+npx.cmd wrangler deploy
 
 ### 7. Verify the live app
 
@@ -256,14 +258,14 @@ Also test it on a mobile phone.
 ## Full redeploy command sequence
 
 cd path/to/your/flet-project
-python -m pip install -U "flet[all]==0.85.0"
-npm install
-flet run --web .
-flet build web . --route-url-strategy path --base-url /
-flet serve
-npx wrangler deploy
+uv sync
+npm.cmd install
+uv run flet run --web .
+$env:PYTHONIOENCODING='utf-8'; $env:PYTHONUTF8='1'; uv run flet build web . --route-url-strategy path --base-url /
+uv run flet serve
+npx.cmd wrangler deploy
 
 ## Quick redeploy after small changes
 
-flet build web . --route-url-strategy path --base-url /
-npx wrangler deploy
+$env:PYTHONIOENCODING='utf-8'; $env:PYTHONUTF8='1'; uv run flet build web . --route-url-strategy path --base-url /
+npx.cmd wrangler deploy
