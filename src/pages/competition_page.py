@@ -23,6 +23,8 @@ class CompetitionPage(ft.Container):
         super().__init__()
         self._main_user_card = MainUserCard(state.selected_candidate)
         self._users_scroll_spacer = ft.Container(height=0)
+        self._card_scroll_offset = 0.0
+        self._last_scroll_pixels = 0.0
         self.expand = True
         self.padding = ft.Padding(left=12, top=16, right=12, bottom=0)
         self.content = ft.Stack(
@@ -70,10 +72,21 @@ class CompetitionPage(ft.Container):
         )
 
     def _handle_users_scroll(self, event: ft.OnScrollEvent) -> None:
-        consumed_scroll = min(event.pixels, self._CARD_COMPRESSION_SCROLL_DISTANCE)
-        compression = consumed_scroll / self._CARD_COMPRESSION_SCROLL_DISTANCE
+        scroll_delta = event.pixels - self._last_scroll_pixels
+        self._last_scroll_pixels = event.pixels
+
+        if event.pixels <= 0:
+            self._card_scroll_offset = 0
+        else:
+            self._card_scroll_offset = self._clamp(
+                self._card_scroll_offset + scroll_delta,
+                0,
+                self._CARD_COMPRESSION_SCROLL_DISTANCE,
+            )
+
+        compression = self._card_scroll_offset / self._CARD_COMPRESSION_SCROLL_DISTANCE
         self._main_user_card.set_compression(compression)
-        self._set_users_scroll_spacer(consumed_scroll)
+        self._set_users_scroll_spacer(self._card_scroll_offset)
 
     def _set_users_scroll_spacer(self, height: float) -> None:
         rounded_height = round(height / self._SPACER_HEIGHT_STEP) * self._SPACER_HEIGHT_STEP
@@ -85,6 +98,10 @@ class CompetitionPage(ft.Container):
             self._users_scroll_spacer.update()
         except RuntimeError:
             pass
+
+    @staticmethod
+    def _clamp(value: float, minimum: float, maximum: float) -> float:
+        return max(minimum, min(maximum, value))
 
     def _build_rewards_button(self, on_open_rewards: Callable[[], None]) -> ft.Container:
         return ft.Container(
