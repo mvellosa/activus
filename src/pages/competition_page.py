@@ -11,6 +11,8 @@ from theme import CARD_SHADOW
 
 class CompetitionPage(ft.Container):
     _CARD_COMPRESSION_SCROLL_DISTANCE = 140
+    _SCROLL_UPDATE_INTERVAL_MS = 16
+    _SPACER_HEIGHT_STEP = 4
 
     def __init__(
         self,
@@ -51,6 +53,7 @@ class CompetitionPage(ft.Container):
                     clip_behavior=ft.ClipBehavior.HARD_EDGE,
                     content=ft.Column(
                         scroll=ft.ScrollMode.AUTO,
+                        scroll_interval=self._SCROLL_UPDATE_INTERVAL_MS,
                         on_scroll=self._handle_users_scroll,
                         spacing=0,
                         controls=[
@@ -73,10 +76,11 @@ class CompetitionPage(ft.Container):
         self._set_users_scroll_spacer(consumed_scroll)
 
     def _set_users_scroll_spacer(self, height: float) -> None:
-        if self._users_scroll_spacer.height == height:
+        rounded_height = round(height / self._SPACER_HEIGHT_STEP) * self._SPACER_HEIGHT_STEP
+        if self._users_scroll_spacer.height == rounded_height:
             return
 
-        self._users_scroll_spacer.height = height
+        self._users_scroll_spacer.height = rounded_height
         try:
             self._users_scroll_spacer.update()
         except RuntimeError:
