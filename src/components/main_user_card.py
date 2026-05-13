@@ -1,7 +1,7 @@
 import flet as ft
 
 from models import Metric, UserDetails
-from theme import SURFACE_COLOR, TEXT_MUTED_COLOR
+from theme import SURFACE_COLOR
 
 from .circular_metric import CircularMetric
 from .metric_definitions import build_metrics
@@ -24,32 +24,34 @@ class MainUserCard(ft.Card):
     def _build_content(self) -> ft.Container:
         compression = self._compression
         padding = round(self._lerp(18, 10, compression))
-        height = round(self._lerp(246, 80, compression))
+        height = round(self._lerp(256, 80, compression))
 
         return ft.Container(
             padding=ft.Padding(left=padding, top=padding, right=padding, bottom=padding),
             width=340,
             height=height,
-            animate_size=ft.Animation(120, ft.AnimationCurve.EASE_OUT),
             content=self.__metrics_stack(340 - (padding * 2), height - (padding * 2)),
         )
 
     def __metrics_stack(self, width: int, height: int) -> ft.Stack:
         compression = self._compression
-        big_size = round(self._lerp(138, 58, compression))
-        big_avatar_size = round(self._lerp(92, 34, compression))
+        big_progress = self._progress_between(self._compression, 0.0, 0.68)
+        metrics_progress = self._progress_between(self._compression, 0.18, 1.0)
+
+        big_size = round(self._lerp(138, 58, big_progress))
+        big_avatar_size = round(self._lerp(92, 34, big_progress))
         big_stroke_width = max(4, round(big_size * 0.07))
-        big_left = self._lerp((width - big_size) / 2, 0, compression)
+        big_left = self._lerp((width - big_size) / 2, 0, big_progress)
         big_top = self._lerp(0, 0, compression)
 
         metrics = build_metrics(self.user.metrics)
-        compact_start = self._lerp(0, 104, compression)
-        metric_size = round(self._lerp(58, 38, compression))
+        metric_size = round(self._lerp(58, 38, metrics_progress))
         metric_stroke_width = round(self._lerp(5, 4, compression))
         expanded_gap = (width - (len(metrics) * metric_size)) / max(1, len(metrics) + 1)
-        compact_gap = 12
-        metric_top = self._lerp(154, 4, compression)
-        value_top = metric_top + metric_size + self._lerp(5, -1, compression)
+        compact_gap = 14
+        compact_total_width = (len(metrics) * metric_size) + ((len(metrics) - 1) * compact_gap)
+        compact_start = width - compact_total_width - 4
+        metric_top = self._lerp(150, (height - metric_size) / 2, metrics_progress)
 
         controls: list[ft.Control] = [
             ft.Container(
@@ -74,7 +76,7 @@ class MainUserCard(ft.Card):
         for index, metric in enumerate(metrics):
             expanded_left = expanded_gap + (index * (metric_size + expanded_gap))
             compact_left = compact_start + (index * (metric_size + compact_gap))
-            left = self._lerp(expanded_left, compact_left, compression)
+            left = self._lerp(expanded_left, compact_left, metrics_progress)
 
             controls.extend(
                 [
@@ -87,19 +89,6 @@ class MainUserCard(ft.Card):
                             stroke_width=metric_stroke_width,
                             toggle_center_content=True,
                             interactive=True,
-                        ),
-                    ),
-                    ft.Container(
-                        left=left,
-                        top=value_top,
-                        width=metric_size,
-                        opacity=compression,
-                        alignment=ft.Alignment(0, 0),
-                        content=ft.Text(
-                            str(round(metric.value * 10)),
-                            size=14,
-                            weight=ft.FontWeight.BOLD,
-                            color=TEXT_MUTED_COLOR,
                         ),
                     ),
                 ]
@@ -139,3 +128,10 @@ class MainUserCard(ft.Card):
     @staticmethod
     def _clamp(value: float) -> float:
         return max(0, min(1, value))
+
+    @classmethod
+    def _progress_between(cls, value: float, start: float, end: float) -> float:
+        if end <= start:
+            return 1
+
+        return cls._clamp((value - start) / (end - start))

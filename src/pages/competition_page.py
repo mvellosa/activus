@@ -20,6 +20,7 @@ class CompetitionPage(ft.Container):
     ) -> None:
         super().__init__()
         self._main_user_card = MainUserCard(state.selected_candidate)
+        self._users_scroll_spacer = ft.Container(height=0)
         self.expand = True
         self.padding = ft.Padding(left=12, top=16, right=12, bottom=0)
         self.content = ft.Stack(
@@ -47,11 +48,13 @@ class CompetitionPage(ft.Container):
                 ft.Container(
                     expand=True,
                     padding=ft.Padding(left=6, top=0, right=6, bottom=0),
+                    clip_behavior=ft.ClipBehavior.HARD_EDGE,
                     content=ft.Column(
                         scroll=ft.ScrollMode.AUTO,
                         on_scroll=self._handle_users_scroll,
                         spacing=0,
                         controls=[
+                            self._users_scroll_spacer,
                             UsersList(
                                 users=state.users,
                                 selected_user_id=state.selected_candidate.user_id,
@@ -64,8 +67,20 @@ class CompetitionPage(ft.Container):
         )
 
     def _handle_users_scroll(self, event: ft.OnScrollEvent) -> None:
-        compression = event.pixels / self._CARD_COMPRESSION_SCROLL_DISTANCE
+        consumed_scroll = min(event.pixels, self._CARD_COMPRESSION_SCROLL_DISTANCE)
+        compression = consumed_scroll / self._CARD_COMPRESSION_SCROLL_DISTANCE
         self._main_user_card.set_compression(compression)
+        self._set_users_scroll_spacer(consumed_scroll)
+
+    def _set_users_scroll_spacer(self, height: float) -> None:
+        if self._users_scroll_spacer.height == height:
+            return
+
+        self._users_scroll_spacer.height = height
+        try:
+            self._users_scroll_spacer.update()
+        except RuntimeError:
+            pass
 
     def _build_rewards_button(self, on_open_rewards: Callable[[], None]) -> ft.Container:
         return ft.Container(
