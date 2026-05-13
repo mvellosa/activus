@@ -118,7 +118,7 @@ class MockCandidatesBackend:
     """Mocked backend for local development and tests."""
 
     def __init__(self) -> None:
-        self._users = [self.create_candidate(i) for i in range(10)]
+        self._users = [self.create_candidate(i) for i in range(26)]
         self._history = {
             user.user_id: self._build_history(user.metric_inputs)
             for user in self._users
