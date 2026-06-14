@@ -254,15 +254,16 @@ class ProfilePage(ft.Container):
 
     def _build_edit_button(self, on_edit_metrics: Callable[[], None]) -> ft.Container:
         return ft.Container(
-            right=14,
-            top=12,
-            width=42,
-            height=42,
-            border_radius=21,
-            content=ft.IconButton(
-                icon=ft.Icons.EDIT_OUTLINED,
-                icon_color="#B6A1E8",
-                icon_size=30,
+            right=10,
+            bottom=16,
+            width=58,
+            height=58,
+            border_radius=29,
+            shadow=CARD_SHADOW,
+            content=ft.FloatingActionButton(
+                icon=ft.Icons.EDIT_NOTE,
+                bgcolor="#FF8A00",
+                foreground_color="#FFFFFF",
                 on_click=lambda _: on_edit_metrics(),
             ),
         )
