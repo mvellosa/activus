@@ -12,20 +12,20 @@ from theme import APP_BG_COLOR, CARD_SHADOW, TEXT_MUTED_COLOR, TEXT_PRIMARY_COLO
 
 METRIC_DESCRIPTIONS: dict[MetricName, str] = {
     MetricName.VITALIDADE: (
-        "Mostra como o corpo esta respondendo ao estresse e a recuperacao. "
-        "Ela usa a variacao da frequencia cardiaca para indicar sua prontidao."
+        "Mostra como o corpo está respondendo ao estresse e à recuperação. "
+        "Ela usa a variação da frequência cardíaca para indicar sua prontidão."
     ),
     MetricName.CARGA: (
-        "Compara o esforco recente com sua carga habitual. Ajuda a entender "
-        "se o treino esta equilibrado, leve demais ou exigente demais."
+        "Compara o esforço recente com sua carga habitual. Ajuda a entender "
+        "se o treino está equilibrado, leve demais ou exigente demais."
     ),
     MetricName.REPOUSO: (
-        "Resume a qualidade do sono, incluindo duracao, eficiencia e sono "
-        "profundo. Quanto melhor o descanso, maior a pontuacao."
+        "Resume a qualidade do sono, incluindo duração, eficiência e sono "
+        "profundo. Quanto melhor o descanso, maior a pontuação."
     ),
     MetricName.ANIMO: (
-        "Representa sua percepcao subjetiva do dia. Esse sinal ajuda a ajustar "
-        "a leitura fisica com como voce realmente esta se sentindo."
+        "Representa sua percepção subjetiva do dia. Esse sinal ajuda a ajustar "
+        "a leitura física com como você realmente está se sentindo."
     ),
 }
 
@@ -73,7 +73,7 @@ class MetricsInfoPage(ft.Container):
                     expand=True,
                     alignment=ft.Alignment(0, 0),
                     content=ft.Text(
-                        "Metricas",
+                        "Métricas",
                         size=22,
                         weight=ft.FontWeight.BOLD,
                         color=TEXT_PRIMARY_COLOR,

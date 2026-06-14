@@ -37,7 +37,7 @@ class CompetitionApp:
         )
         self.page = page
 
-        page.title = "Competicao"
+        page.title = "Activus"
         page.window.width = 420
         page.window.height = 760
         page.padding = 0

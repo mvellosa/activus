@@ -15,6 +15,37 @@ _MOOD_BONUS = {
     MoodLevel.PESSIMO: 0,
 }
 
+_MOCK_CANDIDATE_COUNT = 20
+
+_MOCK_USERS: tuple[tuple[str, str, int], ...] = (
+    ("Matheus Oliveira", "Equipe comercial", 12),
+    ("Renata Martins", "Time de produto", 47),
+    ("Pedro Henrique", "Operações", 33),
+    ("Juliana Costa", "Marketing", 48),
+    ("Lucas Almeida", "Engenharia", 14),
+    ("Camila Rocha", "Financeiro", 49),
+    ("Bruno Ferreira", "Suporte ao cliente", 15),
+    ("Fernanda Lima", "Recursos humanos", 50),
+    ("Rafael Santos", "Vendas internas", 16),
+    ("Mariana Azevedo", "Experiência do cliente", 51),
+    ("Gustavo Pereira", "Logística", 17),
+    ("Aline Carvalho", "Jurídico", 52),
+    ("Felipe Souza", "Dados e BI", 18),
+    ("Bianca Ribeiro", "Comunicação", 53),
+    ("Thiago Moreira", "Planejamento", 19),
+    ("Patrícia Gomes", "Administrativo", 54),
+    ("André Nascimento", "Infraestrutura", 20),
+    ("Letícia Barbosa", "Treinamento", 55),
+    ("Diego Castro", "Projetos", 21),
+    ("Larissa Mendes", "Qualidade", 56),
+    ("Vinícius Araújo", "Parcerias", 22),
+    ("Isabela Teixeira", "Design", 57),
+    ("Caio Fernandes", "Atendimento", 23),
+    ("Tatiane Correia", "Compras", 58),
+    ("João Victor", "Gestão de contas", 24),
+    ("Gabriela Cardoso", "Operações de campo", 59),
+)
+
 
 def _clamp_score(score: float) -> float:
     return max(0, min(100, score))
@@ -118,7 +149,7 @@ class MockCandidatesBackend:
     """Mocked backend for local development and tests."""
 
     def __init__(self) -> None:
-        self._users = [self.create_candidate(i) for i in range(26)]
+        self._users = [self.create_candidate(i) for i in range(_MOCK_CANDIDATE_COUNT)]
         self._history = {
             user.user_id: self._build_history(user.metric_inputs)
             for user in self._users
@@ -129,13 +160,13 @@ class MockCandidatesBackend:
                     title="Smartwatch",
                     type="podium",
                     picture_url="https://images.unsplash.com/photo-1546868871-7041f2a55e12?auto=format&fit=crop&w=320&q=80",
-                    condition="1o lugar",
+                    condition="1º lugar",
                 ),
                 Reward(
                     title="Kit Fitness",
                     type="completion",
                     picture_url="https://images.unsplash.com/photo-1598289431512-b97b0917affc?auto=format&fit=crop&w=320&q=80",
-                    condition="Completar a competicao",
+                    condition="Completar a competição",
                 ),
                 Reward(
                     title="Garrafa esportiva",
@@ -153,7 +184,7 @@ class MockCandidatesBackend:
                     title="Medalha especial",
                     type="streak",
                     picture_url="https://images.unsplash.com/photo-1567427018141-0584cfcbf1b8?auto=format&fit=crop&w=320&q=80",
-                    condition="Maior sequencia de atividade",
+                    condition="Maior sequência de atividade",
                 ),
                 Reward(
                     title="Fone Bluetooth",
@@ -177,13 +208,13 @@ class MockCandidatesBackend:
                     title="Assinatura fitness",
                     type="streak",
                     picture_url="https://images.unsplash.com/photo-1571019613914-85f342c6a11e?auto=format&fit=crop&w=320&q=80",
-                    condition="Manter frequencia acima de 80%",
+                    condition="Manter frequência acima de 80%",
                 ),
                 Reward(
-                    title="Trofeu da equipe",
+                    title="Troféu da equipe",
                     type="podium",
                     picture_url="https://images.unsplash.com/photo-1567427017947-545c5f8d16ad?auto=format&fit=crop&w=320&q=80",
-                    condition="Equipe com maior pontuacao",
+                    condition="Equipe com maior pontuação",
                 ),
                 Reward(
                     title="Cupom nutricional",
@@ -196,15 +227,15 @@ class MockCandidatesBackend:
 
     @staticmethod
     def create_candidate(i: int) -> UserDetails:
-        user_letter = chr(ord("A") + i)
+        name, subtitle, avatar_id = _MOCK_USERS[i % len(_MOCK_USERS)]
         metric_inputs = _random_metric_inputs()
         metrics, score = _readiness_inputs_to_scores(metric_inputs)
 
         return UserDetails(
             user_id=f"id_{i}",
-            name=f"{user_letter}Usuario{i}",
-            subtitle="infos adicionais",
-            image_url=f"https://picsum.photos/200?random={i}",
+            name=name,
+            subtitle=subtitle,
+            image_url=f"https://api.dicebear.com/9.x/lorelei/png?seed=activus-{avatar_id}&size=200",
             metric_inputs=metric_inputs,
             main_metric=score,
             metrics=metrics,

@@ -37,7 +37,7 @@ class MetricsFormPage(ft.Container):
                     on_submit=on_submit,
                     on_cancel=on_cancel,
                 ),
-                SectionTitle("Historico"),
+                SectionTitle("Histórico"),
                 self._build_history(history),
             ],
         )
@@ -64,7 +64,7 @@ class MetricsFormPage(ft.Container):
     def _build_history(self, history: list[MetricHistoryEntry]) -> ft.Container:
         if not history:
             content: ft.Control = ft.Text(
-                "Nenhum historico disponivel.",
+                "Nenhum histórico disponível.",
                 size=13,
                 color=TEXT_MUTED_COLOR,
             )

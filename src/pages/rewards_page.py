@@ -26,7 +26,7 @@ class RewardsPage(ft.Container):
                             color=TEXT_PRIMARY_COLOR,
                         ),
                         ft.Text(
-                            "Participe das competicoes e ganhe\npremios exclusivos!",
+                            "Participe das competições e ganhe\nprêmios exclusivos!",
                             size=17,
                             color=TEXT_MUTED_COLOR,
                             height=1.35,

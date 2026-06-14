@@ -43,7 +43,7 @@ class CompetitionPage(ft.Container):
         return ft.Column(
             spacing=12,
             controls=[
-                SectionTitle("Competicao"),
+                SectionTitle("Activus"),
                 ft.Container(
                     alignment=ft.Alignment(0, 0),
                     content=self._main_user_card,

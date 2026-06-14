@@ -85,7 +85,7 @@ class ProfilePage(ft.Container):
             alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
             vertical_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
-                SectionTitle("Metricas"),
+                SectionTitle("Métricas"),
                 ft.Container(
                     width=24,
                     height=24,
