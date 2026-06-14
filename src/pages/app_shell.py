@@ -8,6 +8,7 @@ from models import CandidatesBackend, DailyMetricInputs, UserDetails
 from theme import APP_BG_COLOR
 
 from .competition_page import CompetitionPage
+from .metrics_info_page import MetricsInfoPage
 from .metrics_form_page import MetricsFormPage
 from .profile_page import ProfilePage
 from .rewards_page import RewardsPage
@@ -30,6 +31,7 @@ class CompetitionApp:
         logged_user = users[0]
         self.state = AppState(
             logged_user=logged_user,
+            logged_user_history=self.backend.get_history(logged_user.user_id),
             selected_candidate=logged_user,
             users=self._rank_users(users),
         )
@@ -51,10 +53,13 @@ class CompetitionApp:
         if self.state.is_editing_metrics:
             body: ft.Control = MetricsFormPage(
                 user=self.state.logged_user,
-                history=self.backend.get_history(self.state.logged_user.user_id),
+                history=self.state.logged_user_history,
                 on_submit=self.update_logged_user_metrics,
                 on_cancel=self.close_metrics_form,
             )
+            controls = [body]
+        elif self.state.is_viewing_metrics_info:
+            body = MetricsInfoPage(on_back=self.close_metrics_info)
             controls = [body]
         elif self.state.is_viewing_rewards:
             body = RewardsPage(
@@ -71,6 +76,7 @@ class CompetitionApp:
             body = ProfilePage(
                 self.state,
                 on_edit_metrics=self.open_metrics_form,
+                on_open_metrics_info=self.open_metrics_info,
             )
             controls = [
                 body,
@@ -122,6 +128,7 @@ class CompetitionApp:
         self.state.selected_tab = tab
         self.state.is_editing_metrics = False
         self.state.is_viewing_rewards = False
+        self.state.is_viewing_metrics_info = False
         self._render()
 
     def open_metrics_form(self) -> None:
@@ -130,6 +137,16 @@ class CompetitionApp:
 
         self.state.is_editing_metrics = True
         self.state.is_viewing_rewards = False
+        self.state.is_viewing_metrics_info = False
+        self._render()
+
+    def open_metrics_info(self) -> None:
+        if self.state is None:
+            return
+
+        self.state.is_editing_metrics = False
+        self.state.is_viewing_rewards = False
+        self.state.is_viewing_metrics_info = True
         self._render()
 
     def open_rewards(self) -> None:
@@ -138,6 +155,7 @@ class CompetitionApp:
 
         self.state.selected_tab = AppTab.COMPETITION
         self.state.is_editing_metrics = False
+        self.state.is_viewing_metrics_info = False
         self.state.is_viewing_rewards = True
         self._render()
 
@@ -146,6 +164,13 @@ class CompetitionApp:
             return
 
         self.state.is_editing_metrics = False
+        self._render()
+
+    def close_metrics_info(self) -> None:
+        if self.state is None:
+            return
+
+        self.state.is_viewing_metrics_info = False
         self._render()
 
     def update_logged_user_metrics(self, metric_inputs: DailyMetricInputs) -> None:
@@ -157,6 +182,7 @@ class CompetitionApp:
             metric_inputs=metric_inputs,
         )
         self.state.logged_user = updated_user
+        self.state.logged_user_history = self.backend.get_history(updated_user.user_id)
         self.state.users = self._rank_users(
             [
                 updated_user if user.user_id == updated_user.user_id else user
@@ -168,6 +194,7 @@ class CompetitionApp:
             self.state.selected_candidate = updated_user
 
         self.state.is_editing_metrics = False
+        self.state.is_viewing_metrics_info = False
         self._render()
 
     @staticmethod

@@ -26,7 +26,6 @@ class ProfileHeader(ft.Container):
             horizontal_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
                 self._build_banner(),
-                ft.Container(height=38),
                 ft.Text(
                     self.user.name,
                     size=18,
@@ -44,11 +43,14 @@ class ProfileHeader(ft.Container):
 
     def _build_banner(self) -> ft.Stack:
         return ft.Stack(
-            height=132,
+            height=202,
             controls=[
                 ft.Container(
-                    height=104,
-                    border_radius=18,
+                    height=154,
+                    border_radius=ft.BorderRadius.only(
+                        bottom_left=0,
+                        bottom_right=0,
+                    ),
                     gradient=ft.LinearGradient(
                         begin=ft.Alignment(-1, -1),
                         end=ft.Alignment(1, 1),
@@ -57,61 +59,71 @@ class ProfileHeader(ft.Container):
                     content=ft.Stack(
                         controls=[
                             ft.Container(
-                                left=0,
-                                right=0,
-                                bottom=-18,
-                                height=82,
-                                border_radius=ft.BorderRadius.only(
-                                    top_left=52,
-                                    top_right=52,
-                                    bottom_left=18,
-                                    bottom_right=18,
-                                ),
+                                left=-28,
+                                top=58,
+                                width=138,
+                                height=86,
+                                border_radius=48,
                                 bgcolor="#4B0E93",
-                                opacity=0.65,
+                                opacity=0.82,
                             ),
                             ft.Container(
-                                left=22,
-                                top=30,
-                                width=86,
-                                height=44,
-                                border_radius=ft.BorderRadius.only(
-                                    top_left=48,
-                                    top_right=48,
-                                    bottom_left=28,
-                                    bottom_right=28,
-                                ),
-                                bgcolor="#7B39E6",
-                                opacity=0.35,
+                                left=116,
+                                top=36,
+                                width=146,
+                                height=128,
+                                border_radius=60,
+                                bgcolor="#3D087E",
+                                opacity=0.9,
                             ),
                             ft.Container(
-                                right=28,
-                                top=10,
-                                width=74,
-                                height=74,
-                                border_radius=37,
-                                bgcolor="#7B39E6",
-                                opacity=0.22,
+                                right=-18,
+                                top=88,
+                                width=118,
+                                height=50,
+                                border_radius=30,
+                                bgcolor="#4B0E93",
+                                opacity=0.88,
                             ),
                         ]
                     ),
                 ),
                 ft.Container(
-                    top=66,
+                    top=102,
                     left=0,
                     right=0,
                     alignment=ft.Alignment(0, 0),
-                    content=ft.Container(
-                        width=76,
-                        height=76,
-                        border_radius=38,
-                        padding=4,
-                        bgcolor=SURFACE_COLOR,
-                        content=ft.Container(
-                            border_radius=34,
-                            bgcolor=APP_BG_COLOR,
-                            content=UserAvatar(self.user, size=68),
-                        ),
+                    content=ft.Stack(
+                        width=112,
+                        height=112,
+                        controls=[
+                            ft.Container(
+                                width=104,
+                                height=104,
+                                border_radius=52,
+                                padding=5,
+                                bgcolor=SURFACE_COLOR,
+                                content=ft.Container(
+                                    border_radius=48,
+                                    bgcolor=APP_BG_COLOR,
+                                    content=UserAvatar(self.user, size=94),
+                                ),
+                            ),
+                            ft.Container(
+                                right=5,
+                                bottom=10,
+                                width=34,
+                                height=34,
+                                border_radius=17,
+                                bgcolor=APP_BG_COLOR,
+                                alignment=ft.Alignment(0, 0),
+                                content=ft.Icon(
+                                    ft.Icons.EDIT_OUTLINED,
+                                    size=27,
+                                    color=TEXT_MUTED_COLOR,
+                                ),
+                            ),
+                        ],
                     ),
                 ),
             ],

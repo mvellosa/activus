@@ -2,6 +2,7 @@ from .bottom_nav import BottomNav
 from .circular_metric import CircularMetric
 from .main_user_card import MainUserCard
 from .metrics_form import MetricsForm
+from .metric_selector import MetricSelector
 from .metric_tile import MetricTile
 from .metrics_grid import MetricsGrid
 from .profile_header import ProfileHeader
@@ -10,12 +11,14 @@ from .section_title import SectionTitle
 from .user_avatar import UserAvatar
 from .user_list_item import UserListItem
 from .users_list import UsersList
+from .weekly_performance_chart import WeeklyPerformanceChart
 
 __all__ = [
     "BottomNav",
     "CircularMetric",
     "MainUserCard",
     "MetricsForm",
+    "MetricSelector",
     "MetricTile",
     "MetricsGrid",
     "ProfileHeader",
@@ -24,4 +27,5 @@ __all__ = [
     "UserAvatar",
     "UserListItem",
     "UsersList",
+    "WeeklyPerformanceChart",
 ]

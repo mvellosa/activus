@@ -216,7 +216,7 @@ class MockCandidatesBackend:
         today = date.today()
         entries: list[MetricHistoryEntry] = []
 
-        for days_ago in range(1, 5):
+        for days_ago in range(1, 7):
             metric_snapshot, final_score = _readiness_inputs_to_scores(
                 _jitter_metric_inputs(metric_inputs)
             )
