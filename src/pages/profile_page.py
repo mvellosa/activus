@@ -18,10 +18,19 @@ from models import Metric, MetricName, UserDetails
 from theme import (
     BORDER_COLOR,
     CARD_SHADOW,
+    PRIMARY_COLOR,
     RING_GRADIENT,
     SURFACE_COLOR,
     TEXT_MUTED_COLOR,
     TEXT_PRIMARY_COLOR,
+)
+
+
+CHART_PERIOD_OPTIONS: tuple[tuple[int, str], ...] = (
+    (7, "7 dias"),
+    (14, "14 dias"),
+    (30, "1 mês"),
+    (90, "3 meses"),
 )
 
 
@@ -37,6 +46,7 @@ class ProfilePage(ft.Container):
         self._on_edit_metrics = on_edit_metrics
         self._on_open_metrics_info = on_open_metrics_info
         self._selected_metric = self._default_metric(state)
+        self._chart_period_days = CHART_PERIOD_OPTIONS[0][0]
         self._chart_toolbar_holder: ft.Container | None = None
         self._chart_holder: ft.Container | None = None
         self.expand = True
@@ -69,7 +79,7 @@ class ProfilePage(ft.Container):
                     content=ft.Column(
                         spacing=14,
                         controls=[
-                            SectionTitle("Desempenho semanal"),
+                            SectionTitle("Desempenho"),
                             self._build_chart_toolbar_holder(metrics),
                             self._build_chart_holder(user, state, selected_metric),
                         ],
@@ -124,6 +134,7 @@ class ProfilePage(ft.Container):
                 history=state.logged_user_history,
                 selected_metric=self._selected_metric,
                 metric=selected_metric,
+                period_days=self._chart_period_days,
             ),
         )
         return self._chart_holder
@@ -180,30 +191,7 @@ class ProfilePage(ft.Container):
             spacing=14,
             vertical_alignment=ft.CrossAxisAlignment.CENTER,
             controls=[
-                ft.Container(
-                    height=28,
-                    padding=ft.Padding(left=10, top=0, right=10, bottom=0),
-                    border=ft.Border.all(1, BORDER_COLOR),
-                    border_radius=14,
-                    alignment=ft.Alignment(0, 0),
-                    content=ft.Row(
-                        spacing=4,
-                        vertical_alignment=ft.CrossAxisAlignment.CENTER,
-                        controls=[
-                            ft.Icon(
-                                ft.Icons.ARROW_DROP_DOWN,
-                                size=18,
-                                color=TEXT_MUTED_COLOR,
-                            ),
-                            ft.Text(
-                                "7 dias",
-                                size=11,
-                                weight=ft.FontWeight.W_600,
-                                color=TEXT_MUTED_COLOR,
-                            ),
-                        ],
-                    ),
-                ),
+                self._build_period_menu(),
                 ft.Container(
                     expand=True,
                     content=MetricSelector(
@@ -215,6 +203,64 @@ class ProfilePage(ft.Container):
                 ),
             ],
         )
+
+    def _build_period_menu(self) -> ft.PopupMenuButton:
+        selected_label = self._period_label(self._chart_period_days)
+        return ft.PopupMenuButton(
+            padding=0,
+            menu_padding=4,
+            tooltip="Selecionar período",
+            content=ft.Container(
+                height=28,
+                padding=ft.Padding(left=10, top=0, right=10, bottom=0),
+                border=ft.Border.all(1, BORDER_COLOR),
+                border_radius=14,
+                alignment=ft.Alignment(0, 0),
+                content=ft.Row(
+                    spacing=4,
+                    vertical_alignment=ft.CrossAxisAlignment.CENTER,
+                    controls=[
+                        ft.Icon(
+                            ft.Icons.ARROW_DROP_DOWN,
+                            size=18,
+                            color=TEXT_MUTED_COLOR,
+                        ),
+                        ft.Text(
+                            selected_label,
+                            size=11,
+                            weight=ft.FontWeight.W_600,
+                            color=TEXT_MUTED_COLOR,
+                        ),
+                    ],
+                ),
+            ),
+            items=[
+                ft.PopupMenuItem(
+                    content=label,
+                    checked=days == self._chart_period_days,
+                    label_text_style=ft.TextStyle(
+                        size=12,
+                        weight=ft.FontWeight.W_600,
+                        color=(
+                            PRIMARY_COLOR
+                            if days == self._chart_period_days
+                            else TEXT_PRIMARY_COLOR
+                        ),
+                    ),
+                    on_click=lambda _, selected_days=days: self._select_chart_period(
+                        selected_days
+                    ),
+                )
+                for days, label in CHART_PERIOD_OPTIONS
+            ],
+        )
+
+    def _period_label(self, period_days: int) -> str:
+        for days, label in CHART_PERIOD_OPTIONS:
+            if days == period_days:
+                return label
+
+        return CHART_PERIOD_OPTIONS[0][1]
 
     def _default_metric(self, state: AppState) -> MetricName:
         return next(iter(state.logged_user.metrics), MetricName.VITALIDADE)
@@ -236,6 +282,16 @@ class ProfilePage(ft.Container):
             return
 
         self._selected_metric = metric_name
+        self._refresh_chart()
+
+    def _select_chart_period(self, period_days: int) -> None:
+        if self._chart_period_days == period_days:
+            return
+
+        self._chart_period_days = period_days
+        self._refresh_chart()
+
+    def _refresh_chart(self) -> None:
         metrics = self._build_named_metrics(self._state)
         selected_metric = self._selected_metric_model(metrics)
 
@@ -249,6 +305,7 @@ class ProfilePage(ft.Container):
                 history=self._state.logged_user_history,
                 selected_metric=self._selected_metric,
                 metric=selected_metric,
+                period_days=self._chart_period_days,
             )
             self._chart_holder.update()
 

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 
 import flet as ft
 import flet.canvas as cv
@@ -25,6 +25,7 @@ class WeeklyPerformanceChart(ft.Container):
         history: list[MetricHistoryEntry],
         selected_metric: MetricName,
         metric: Metric,
+        period_days: int = 7,
     ) -> None:
         super().__init__()
         self.alignment = ft.Alignment(0, 0)
@@ -32,7 +33,7 @@ class WeeklyPerformanceChart(ft.Container):
         self.content = cv.Canvas(
             width=self._WIDTH,
             height=self._HEIGHT,
-            shapes=self._build_shapes(user, history, selected_metric, metric),
+            shapes=self._build_shapes(user, history, selected_metric, metric, period_days),
         )
 
     def _build_shapes(
@@ -41,8 +42,9 @@ class WeeklyPerformanceChart(ft.Container):
         history: list[MetricHistoryEntry],
         selected_metric: MetricName,
         metric: Metric,
+        period_days: int,
     ) -> list[cv.Shape]:
-        points = self._build_points(user, history, selected_metric)
+        points = self._build_points(user, history, selected_metric, period_days)
         shapes: list[cv.Shape] = []
         plot_width = self._WIDTH - self._LEFT - self._RIGHT
         plot_height = self._HEIGHT - self._TOP - self._BOTTOM
@@ -104,7 +106,11 @@ class WeeklyPerformanceChart(ft.Container):
         for x, y, _ in coordinates:
             shapes.append(cv.Circle(x, y, 3.4, paint=point_paint))
 
-        for x, _, entry_date in coordinates:
+        label_step = max(1, (len(coordinates) + 6) // 7)
+        for index, (x, _, entry_date) in enumerate(coordinates):
+            if index % label_step != 0 and index != len(coordinates) - 1:
+                continue
+
             weekday = self._WEEKDAY_LABELS[entry_date.weekday()]
             shapes.append(
                 cv.Text(
@@ -128,15 +134,22 @@ class WeeklyPerformanceChart(ft.Container):
         user: UserDetails,
         history: list[MetricHistoryEntry],
         selected_metric: MetricName,
+        period_days: int,
     ) -> list[tuple[date, float]]:
         snapshots: dict[date, float] = {}
+        today = date.today()
+        earliest_date = today - timedelta(days=max(0, period_days - 1))
 
         for entry in history:
             try:
                 entry_date = date.fromisoformat(entry.date)
             except ValueError:
                 continue
+
+            if entry_date < earliest_date:
+                continue
+
             snapshots[entry_date] = entry.metrics.get(selected_metric, 0)
 
-        snapshots[date.today()] = user.metrics.get(selected_metric, 0)
-        return sorted(snapshots.items())[-7:]
+        snapshots[today] = user.metrics.get(selected_metric, 0)
+        return sorted(snapshots.items())

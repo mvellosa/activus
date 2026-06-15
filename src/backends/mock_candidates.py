@@ -16,6 +16,11 @@ _MOOD_BONUS = {
 }
 
 _MOCK_CANDIDATE_COUNT = 20
+_MOCK_HISTORY_DAYS = 90
+_MOCK_HISTORY_DAILY_DELTA = 0.055
+_MOCK_HISTORY_NOISE_DELTA = 0.025
+_MOCK_HISTORY_TREND_DELTA = 0.012
+_MOCK_HISTORY_MAX_TREND = 0.03
 
 _MOCK_USERS: tuple[tuple[str, str, int], ...] = (
     ("Matheus Oliveira", "Equipe comercial", 12),
@@ -49,6 +54,10 @@ _MOCK_USERS: tuple[tuple[str, str, int], ...] = (
 
 def _clamp_score(score: float) -> float:
     return max(0, min(100, score))
+
+
+def _clamp_unit(value: float) -> float:
+    return max(0, min(1, value))
 
 
 def _readiness_inputs_to_scores(
@@ -132,16 +141,54 @@ def _random_metric_inputs() -> DailyMetricInputs:
     )
 
 
-def _jitter_metric_inputs(metric_inputs: DailyMetricInputs) -> DailyMetricInputs:
-    return DailyMetricInputs(
-        rmssd_day=max(1, metric_inputs.rmssd_day + random.uniform(-8, 8)),
-        rmssd_baseline=max(1, metric_inputs.rmssd_baseline + random.uniform(-5, 5)),
-        acute_load=max(0, metric_inputs.acute_load + random.uniform(-90, 90)),
-        chronic_load=max(1, metric_inputs.chronic_load + random.uniform(-70, 70)),
-        total_sleep_hours=max(0, metric_inputs.total_sleep_hours + random.uniform(-0.8, 0.8)),
-        sleep_efficiency=max(0, min(100, metric_inputs.sleep_efficiency + random.uniform(-8, 8))),
-        deep_sleep_percent=max(0, min(100, metric_inputs.deep_sleep_percent + random.uniform(-5, 5))),
-        mood=random.choice(list(MoodLevel)),
+def _next_history_value(value: float, trend: float) -> tuple[float, float]:
+    next_trend = max(
+        -_MOCK_HISTORY_MAX_TREND,
+        min(
+            _MOCK_HISTORY_MAX_TREND,
+            trend + random.uniform(-_MOCK_HISTORY_TREND_DELTA, _MOCK_HISTORY_TREND_DELTA),
+        ),
+    )
+    noise = random.uniform(-_MOCK_HISTORY_NOISE_DELTA, _MOCK_HISTORY_NOISE_DELTA)
+    daily_delta = max(
+        -_MOCK_HISTORY_DAILY_DELTA,
+        min(_MOCK_HISTORY_DAILY_DELTA, next_trend + noise),
+    )
+    next_value = _clamp_unit(value + daily_delta)
+    return next_value, next_trend
+
+
+def _build_metric_history_snapshots(
+    metrics: dict[MetricName, float],
+) -> list[dict[MetricName, float]]:
+    current_metrics = metrics.copy()
+    trends = {
+        metric_name: random.uniform(-_MOCK_HISTORY_MAX_TREND, _MOCK_HISTORY_MAX_TREND)
+        for metric_name in MetricName
+    }
+    snapshots: list[dict[MetricName, float]] = []
+
+    for _ in range(1, _MOCK_HISTORY_DAYS):
+        next_metrics: dict[MetricName, float] = {}
+        for metric_name in MetricName:
+            next_value, trends[metric_name] = _next_history_value(
+                current_metrics.get(metric_name, 0),
+                trends[metric_name],
+            )
+            next_metrics[metric_name] = next_value
+
+        snapshots.append(next_metrics)
+        current_metrics = next_metrics
+
+    return snapshots
+
+
+def _history_score_from_metrics(metrics: dict[MetricName, float]) -> float:
+    return _clamp_unit(
+        (metrics.get(MetricName.VITALIDADE, 0) * 0.35)
+        + (metrics.get(MetricName.CARGA, 0) * 0.30)
+        + (metrics.get(MetricName.REPOUSO, 0) * 0.20)
+        + (metrics.get(MetricName.ANIMO, 0) * 0.15)
     )
 
 
@@ -246,16 +293,15 @@ class MockCandidatesBackend:
     def _build_history(metric_inputs: DailyMetricInputs) -> list[MetricHistoryEntry]:
         today = date.today()
         entries: list[MetricHistoryEntry] = []
+        current_metrics, _ = _readiness_inputs_to_scores(metric_inputs)
+        metric_snapshots = _build_metric_history_snapshots(current_metrics)
 
-        for days_ago in range(1, 7):
-            metric_snapshot, final_score = _readiness_inputs_to_scores(
-                _jitter_metric_inputs(metric_inputs)
-            )
+        for days_ago, metric_snapshot in enumerate(metric_snapshots, start=1):
             entries.append(
                 MetricHistoryEntry(
-                    date=(today - timedelta(days=days_ago * 7)).isoformat(),
+                    date=(today - timedelta(days=days_ago)).isoformat(),
                     metrics=metric_snapshot,
-                    final_score=final_score,
+                    final_score=_history_score_from_metrics(metric_snapshot),
                 )
             )
 
